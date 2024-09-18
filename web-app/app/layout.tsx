@@ -1,21 +1,12 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
+import "./reset.scss";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import { Box, Flex } from "@chakra-ui/react";
 
-export const metadata: Metadata = {
-  title: "Public ICO",
-  description: "A decentralized way to get funding for your web3 project",
-};
+import { Providers } from "./providers";
+import { fonts } from "./fonts";
+import SideMenu from "@/components/SideMenu";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function RootLayout({
   children,
@@ -23,9 +14,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+    <html lang="en" className={fonts.rubik.variable}>
+      <body>
+        <Providers>
+          <Flex minH="100vh" direction="column">
+            <SideMenu />
+            <Flex
+              flex="1"
+              direction="column"
+              minH="100vh"
+              ml="250px"
+              bg="gray.50"
+            >
+              <Header />
+              <Box flex="1" p={6} w="full">
+                {children}
+              </Box>
+              <Footer />
+            </Flex>
+          </Flex>
+        </Providers>
       </body>
     </html>
   );
