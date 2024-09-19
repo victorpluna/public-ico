@@ -4,9 +4,9 @@ import { Box, Flex } from "@chakra-ui/react";
 
 import { Providers } from "./providers";
 import { fonts } from "./fonts";
-import SideMenu from "@/components/SideMenu";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import SideMenu from "@/app/components/SideMenu";
+import Header from "@/app/components/Header";
+import Footer from "@/app/components/Footer";
 
 export default function RootLayout({
   children,
