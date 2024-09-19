@@ -1,11 +1,11 @@
 import { http, createConfig } from "wagmi";
-import { mainnet } from "wagmi/chains";
 import { metaMask } from "wagmi/connectors";
+import { ganacheChain } from "./ganache-chain";
 
 export const config = createConfig({
-  chains: [mainnet],
+  chains: [ganacheChain],
   connectors: [metaMask()],
   transports: {
-    [mainnet.id]: http(),
+    [ganacheChain.id]: http(),
   },
 });
