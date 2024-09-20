@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity >=0.8.2 <0.9.0;
 
 contract PublicICO {
     struct Project {
@@ -166,15 +166,15 @@ contract PublicICO {
         emit ProjectApplied(projectId, project.creator, project.totalFunding);
     }
 
-    function listActiveProjects() external view returns (uint[] memory) {
-        uint[] memory activeProjects = new uint[](projectCount);
+    function listActiveProjects() external view returns (Project[] memory) {
+        Project[] memory activeProjects = new Project[](projectCount);
         uint counter = 0;
 
         for (uint i = 0; i < projectCount; i++) {
             if (
                 block.timestamp < projects[i].deadline && !projects[i].applied
             ) {
-                activeProjects[counter] = i;
+                activeProjects[counter] = projects[i];
                 counter++;
             }
         }

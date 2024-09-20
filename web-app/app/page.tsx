@@ -1,3 +1,4 @@
+"use client";
 import {
   Stat,
   StatArrow,
@@ -15,8 +16,25 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import React from "react";
+import { useReadContract } from "wagmi";
+import { contractAbi } from "./config/contract-abi";
+import { Project } from "./models/project";
+import { TableSkeleton } from "./components/TableSkeleton";
+import { formatUnits } from "ethers";
+import { BigNumberish } from "ethers";
+import { contractAddress } from "./config/wagmi";
+
+interface ListProjectsResponse {
+  data: Project[] | undefined;
+}
 
 export default function Home() {
+  const { data: projects }: ListProjectsResponse = useReadContract({
+    abi: contractAbi,
+    address: contractAddress,
+    functionName: "listActiveProjects",
+  });
+
   return (
     <div>
       <StatGroup mb="50px">
@@ -45,52 +63,49 @@ export default function Home() {
           </StatHelpText>
         </Stat>
       </StatGroup>
-      <TableContainer>
-        <Table variant="striped">
-          <TableCaption>
-            Projects that have not yet completed the target funding amount
-          </TableCaption>
-          <Thead>
-            <Tr>
-              <Th>Project Name</Th>
-              <Th isNumeric>Target Funding</Th>
-              <Th isNumeric>Locked Funding</Th>
-              <Th isNumeric>Creator Funding</Th>
-              <Th>Expiry Date</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            <Tr>
-              <Td>Initial Coin Offering 1</Td>
-              <Td isNumeric>25.4</Td>
-              <Td isNumeric>25.4 (83,4%)</Td>
-              <Td isNumeric>25.4</Td>
-              <Td>10/11/2024</Td>
-            </Tr>
-            <Tr>
-              <Td>Initial Coin Offering 2</Td>
-              <Td isNumeric>25.4</Td>
-              <Td isNumeric>25.4 (67,1%)</Td>
-              <Td isNumeric>25.4</Td>
-              <Td>10/11/2024</Td>
-            </Tr>
-            <Tr>
-              <Td>Initial Coin Offering 3</Td>
-              <Td isNumeric>25.4</Td>
-              <Td isNumeric>25.4 (33,8%)</Td>
-              <Td isNumeric>25.4</Td>
-              <Td>10/11/2024</Td>
-            </Tr>
-            <Tr>
-              <Td>Initial Coin Offering 4</Td>
-              <Td isNumeric>25.4</Td>
-              <Td isNumeric>25.4 (7,2%)</Td>
-              <Td isNumeric>25.4</Td>
-              <Td>10/11/2024</Td>
-            </Tr>
-          </Tbody>
-        </Table>
-      </TableContainer>
+      {projects === undefined ? (
+        <TableSkeleton />
+      ) : (
+        <TableContainer>
+          <Table variant="striped">
+            <TableCaption>
+              Projects that have not yet completed the target funding amount
+            </TableCaption>
+            <Thead>
+              <Tr>
+                <Th>Project Name</Th>
+                <Th isNumeric>Target Funding</Th>
+                <Th isNumeric>Locked Funding</Th>
+                <Th isNumeric>Creator Funding</Th>
+                <Th>Expiry Date</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {projects?.map(
+                (
+                  { targetFunding, totalFunding, ownFunding, deadline },
+                  index
+                ) => (
+                  <Tr key={index}>
+                    <Td>Initial Coin Offering 1</Td>
+                    <Td isNumeric>{formatUnits(targetFunding, "ether")} ETH</Td>
+                    <Td isNumeric>
+                      {formatUnits(totalFunding, "ether")} ETH (83,4%)
+                    </Td>
+                    <Td isNumeric>{formatUnits(ownFunding, "ether")} ETH</Td>
+                    <Td>
+                      {convertTimestampToDate(deadline).toLocaleDateString()}
+                    </Td>
+                  </Tr>
+                )
+              )}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      )}
     </div>
   );
 }
+
+const convertTimestampToDate = (timestamp: BigNumberish) =>
+  new Date(Number(timestamp) * 1000);
