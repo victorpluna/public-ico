@@ -1,5 +1,6 @@
 "use client";
 import {
+  Progress,
   Stat,
   StatArrow,
   StatGroup,
@@ -14,6 +15,7 @@ import {
   Th,
   Thead,
   Tr,
+  Text,
 } from "@chakra-ui/react";
 import React from "react";
 import { useReadContract } from "wagmi";
@@ -74,9 +76,10 @@ export default function Home() {
             <Thead>
               <Tr>
                 <Th>Project Name</Th>
+                <Th isNumeric>Creator Funding</Th>
                 <Th isNumeric>Target Funding</Th>
                 <Th isNumeric>Locked Funding</Th>
-                <Th isNumeric>Creator Funding</Th>
+                <Th>Progress</Th>
                 <Th>Expiry Date</Th>
               </Tr>
             </Thead>
@@ -88,11 +91,26 @@ export default function Home() {
                 ) => (
                   <Tr key={index}>
                     <Td>{title}</Td>
-                    <Td isNumeric>{formatUnits(targetFunding, "ether")} ETH</Td>
-                    <Td isNumeric>
-                      {formatUnits(totalFunding, "ether")} ETH (83,4%)
-                    </Td>
                     <Td isNumeric>{formatUnits(ownFunding, "ether")} ETH</Td>
+                    <Td isNumeric>{formatUnits(targetFunding, "ether")} ETH</Td>
+                    <Td isNumeric>{formatUnits(totalFunding, "ether")} ETH</Td>
+                    <Td>
+                      <Progress
+                        value={calculateFundingProgress(
+                          targetFunding,
+                          totalFunding
+                        )}
+                        size="xs"
+                        colorScheme="teal"
+                      />
+                      <Text fontSize="11px">
+                        {Math.min(
+                          calculateFundingProgress(targetFunding, totalFunding),
+                          100
+                        )}
+                        %
+                      </Text>
+                    </Td>
                     <Td>
                       {convertTimestampToDate(deadline).toLocaleDateString()}
                     </Td>
@@ -109,3 +127,15 @@ export default function Home() {
 
 const convertTimestampToDate = (timestamp: BigNumberish) =>
   new Date(Number(timestamp) * 1000);
+
+const calculateFundingProgress = (
+  targetFunding: BigNumberish,
+  totalFunding: BigNumberish
+) =>
+  Number(
+    (
+      (Number(formatUnits(totalFunding, "ether")) /
+        Number(formatUnits(targetFunding, "ether"))) *
+      100
+    ).toFixed(2)
+  );
