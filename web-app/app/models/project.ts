@@ -1,4 +1,5 @@
 export interface Project {
+  title: string;
   creator: string;
   whitePaper: string;
   projectPlan: string;

@@ -11,4 +11,4 @@ export const config = createConfig({
   },
 });
 
-export const contractAddress = "0xE5392cB0c1e8dBBFAB78A5cF29e1B75c3a231744";
+export const contractAddress = "0x9AdFcA25539A8F4Ba1276A23E59c00A868FC3E82";

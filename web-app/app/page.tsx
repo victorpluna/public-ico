@@ -83,11 +83,11 @@ export default function Home() {
             <Tbody>
               {projects?.map(
                 (
-                  { targetFunding, totalFunding, ownFunding, deadline },
+                  { title, targetFunding, totalFunding, ownFunding, deadline },
                   index
                 ) => (
                   <Tr key={index}>
-                    <Td>Initial Coin Offering 1</Td>
+                    <Td>{title}</Td>
                     <Td isNumeric>{formatUnits(targetFunding, "ether")} ETH</Td>
                     <Td isNumeric>
                       {formatUnits(totalFunding, "ether")} ETH (83,4%)

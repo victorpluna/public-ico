@@ -72,6 +72,11 @@ export const contractAbi = [
     inputs: [
       {
         internalType: "string",
+        name: "title",
+        type: "string",
+      },
+      {
+        internalType: "string",
         name: "whitePaper",
         type: "string",
       },
@@ -162,6 +167,12 @@ export const contractAbi = [
       },
       {
         indexed: false,
+        internalType: "string",
+        name: "title",
+        type: "string",
+      },
+      {
+        indexed: false,
         internalType: "address",
         name: "creator",
         type: "address",
@@ -224,6 +235,11 @@ export const contractAbi = [
     outputs: [
       {
         components: [
+          {
+            internalType: "string",
+            name: "title",
+            type: "string",
+          },
           {
             internalType: "address",
             name: "creator",
@@ -306,6 +322,11 @@ export const contractAbi = [
     ],
     name: "projects",
     outputs: [
+      {
+        internalType: "string",
+        name: "title",
+        type: "string",
+      },
       {
         internalType: "address",
         name: "creator",

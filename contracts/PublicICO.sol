@@ -3,6 +3,7 @@ pragma solidity >=0.8.2 <0.9.0;
 
 contract PublicICO {
     struct Project {
+        string title;
         address creator;
         string whitePaper;
         string projectPlan;
@@ -21,6 +22,7 @@ contract PublicICO {
 
     event ProjectCreated(
         uint projectId,
+        string title,
         address creator,
         string whitePaper,
         string projectPlan,
@@ -78,6 +80,7 @@ contract PublicICO {
     }
 
     function createProject(
+        string memory title,
         string memory whitePaper,
         string memory projectPlan,
         string memory contractCode,
@@ -90,6 +93,7 @@ contract PublicICO {
 
         Project memory newProject = Project({
             creator: msg.sender,
+            title: title,
             whitePaper: whitePaper,
             projectPlan: projectPlan,
             contractCode: contractCode,
@@ -105,6 +109,7 @@ contract PublicICO {
 
         emit ProjectCreated(
             projectCount,
+            title,
             msg.sender,
             whitePaper,
             projectPlan,
