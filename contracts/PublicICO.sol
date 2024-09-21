@@ -3,6 +3,7 @@ pragma solidity >=0.8.2 <0.9.0;
 
 contract PublicICO {
     struct Project {
+        uint id;
         string title;
         address creator;
         string whitePaper;
@@ -92,6 +93,7 @@ contract PublicICO {
         uint deadline = block.timestamp + 90 days;
 
         Project memory newProject = Project({
+            id: projectCount,
             creator: msg.sender,
             title: title,
             whitePaper: whitePaper,
@@ -185,5 +187,19 @@ contract PublicICO {
         }
 
         return activeProjects;
+    }
+
+    function listClosedProjects() external view returns (Project[] memory) {
+        Project[] memory closedProjects = new Project[](projectCount);
+        uint counter = 0;
+
+        for (uint i = 0; i < projectCount; i++) {
+            if (block.timestamp > projects[i].deadline || projects[i].applied) {
+                closedProjects[counter] = projects[i];
+                counter++;
+            }
+        }
+
+        return closedProjects;
     }
 }
