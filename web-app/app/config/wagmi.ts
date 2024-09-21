@@ -10,5 +10,3 @@ export const config = createConfig({
     [sepolia.id]: http(),
   },
 });
-
-export const contractAddress = "0x9AdFcA25539A8F4Ba1276A23E59c00A868FC3E82";

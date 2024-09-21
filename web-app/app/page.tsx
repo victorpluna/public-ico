@@ -17,14 +17,13 @@ import {
   Tr,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
 import { useReadContract } from "wagmi";
+import { formatUnits } from "ethers";
+import { BigNumberish } from "ethers";
 import { contractAbi } from "./config/contract-abi";
 import { Project } from "./models/project";
 import { TableSkeleton } from "./components/TableSkeleton";
-import { formatUnits } from "ethers";
-import { BigNumberish } from "ethers";
-import { contractAddress } from "./config/wagmi";
+import { constants } from "./lib/constants";
 
 interface ListProjectsResponse {
   data: Project[] | undefined;
@@ -33,7 +32,7 @@ interface ListProjectsResponse {
 export default function Home() {
   const { data: projects }: ListProjectsResponse = useReadContract({
     abi: contractAbi,
-    address: contractAddress,
+    address: constants.contractAddress,
     functionName: "listActiveProjects",
   });
 
