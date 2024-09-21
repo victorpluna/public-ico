@@ -236,6 +236,86 @@ export const contractAbi = [
       {
         components: [
           {
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "title",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "creator",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "whitePaper",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "projectPlan",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "contractCode",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "ownFunding",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "targetFunding",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "totalFunding",
+            type: "uint256",
+          },
+          {
+            internalType: "address payable",
+            name: "fundingWallet",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "deadline",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "applied",
+            type: "bool",
+          },
+        ],
+        internalType: "struct PublicICO.Project[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "listClosedProjects",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
+          },
+          {
             internalType: "string",
             name: "title",
             type: "string",
@@ -322,6 +402,11 @@ export const contractAbi = [
     ],
     name: "projects",
     outputs: [
+      {
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
       {
         internalType: "string",
         name: "title",

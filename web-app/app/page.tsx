@@ -24,6 +24,7 @@ import { contractAbi } from "./config/contract-abi";
 import { Project } from "./models/project";
 import { TableSkeleton } from "./components/TableSkeleton";
 import { constants } from "./lib/constants";
+import { Link } from "@chakra-ui/next-js";
 
 interface ListProjectsResponse {
   data: Project[] | undefined;
@@ -35,6 +36,10 @@ export default function Home() {
     address: constants.contractAddress,
     functionName: "listActiveProjects",
   });
+
+  if (projects === undefined) {
+    return <TableSkeleton />;
+  }
 
   return (
     <div>
@@ -64,30 +69,39 @@ export default function Home() {
           </StatHelpText>
         </Stat>
       </StatGroup>
-      {projects === undefined ? (
-        <TableSkeleton />
-      ) : (
-        <TableContainer>
-          <Table variant="striped">
-            <TableCaption>
-              Projects that have not yet completed the target funding amount
-            </TableCaption>
-            <Thead>
-              <Tr>
-                <Th>Project Name</Th>
-                <Th isNumeric>Creator Funding</Th>
-                <Th isNumeric>Target Funding</Th>
-                <Th isNumeric>Locked Funding</Th>
-                <Th>Progress</Th>
-                <Th>Expiry Date</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {projects?.map(
-                (
-                  { title, targetFunding, totalFunding, ownFunding, deadline },
-                  index
-                ) => (
+      <TableContainer>
+        <Table variant="striped">
+          <TableCaption>
+            Projects that have not yet completed the target funding amount
+          </TableCaption>
+          <Thead>
+            <Tr>
+              <Th>Project Name</Th>
+              <Th isNumeric>Creator Funding</Th>
+              <Th isNumeric>Target Funding</Th>
+              <Th isNumeric>Locked Funding</Th>
+              <Th>Progress</Th>
+              <Th>Expiry Date</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {projects?.map(
+              (
+                {
+                  id,
+                  title,
+                  targetFunding,
+                  totalFunding,
+                  ownFunding,
+                  deadline,
+                },
+                index
+              ) => (
+                <Link
+                  href={`/projects/${id}`}
+                  cursor="pointer"
+                  display="contents"
+                >
                   <Tr key={index}>
                     <Td>{title}</Td>
                     <Td isNumeric>{formatUnits(ownFunding, "ether")} ETH</Td>
@@ -114,12 +128,12 @@ export default function Home() {
                       {convertTimestampToDate(deadline).toLocaleDateString()}
                     </Td>
                   </Tr>
-                )
-              )}
-            </Tbody>
-          </Table>
-        </TableContainer>
-      )}
+                </Link>
+              )
+            )}
+          </Tbody>
+        </Table>
+      </TableContainer>
     </div>
   );
 }
