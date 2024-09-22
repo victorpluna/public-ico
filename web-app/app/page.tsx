@@ -116,7 +116,7 @@ export default function Home() {
                         size="xs"
                         colorScheme="teal"
                       />
-                      <Text fontSize="11px">
+                      <Text fontSize="xs">
                         {Math.min(
                           calculateFundingProgress(targetFunding, totalFunding),
                           100
