@@ -202,4 +202,10 @@ contract PublicICO {
 
         return closedProjects;
     }
+
+    function retrieveProject(
+        uint projectId
+    ) external view projectExists(projectId) returns (Project memory) {
+        return projects[projectId];
+    }
 }

@@ -1,44 +1,5 @@
 export const contractAbi = [
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "projectId",
-        type: "uint256",
-      },
-    ],
-    name: "applyProject",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "projectId",
-        type: "uint256",
-      },
-    ],
-    name: "claimFunds",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "projectId",
-        type: "uint256",
-      },
-    ],
-    name: "contribute",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
     inputs: [],
     stateMutability: "nonpayable",
     type: "constructor",
@@ -67,44 +28,6 @@ export const contractAbi = [
     ],
     name: "ContributionReceived",
     type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "title",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "whitePaper",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "projectPlan",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "contractCode",
-        type: "string",
-      },
-      {
-        internalType: "uint256",
-        name: "targetFunding",
-        type: "uint256",
-      },
-      {
-        internalType: "address payable",
-        name: "fundingWallet",
-        type: "address",
-      },
-    ],
-    name: "createProject",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
   },
   {
     anonymous: false,
@@ -209,6 +132,45 @@ export const contractAbi = [
     inputs: [
       {
         internalType: "uint256",
+        name: "projectId",
+        type: "uint256",
+      },
+    ],
+    name: "applyProject",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "projectId",
+        type: "uint256",
+      },
+    ],
+    name: "claimFunds",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "projectId",
+        type: "uint256",
+      },
+    ],
+    name: "contribute",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
         name: "",
         type: "uint256",
       },
@@ -227,6 +189,44 @@ export const contractAbi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "title",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "whitePaper",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "projectPlan",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "contractCode",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "targetFunding",
+        type: "uint256",
+      },
+      {
+        internalType: "address payable",
+        name: "fundingWallet",
+        type: "address",
+      },
+    ],
+    name: "createProject",
+    outputs: [],
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -461,6 +461,87 @@ export const contractAbi = [
         internalType: "bool",
         name: "applied",
         type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "projectId",
+        type: "uint256",
+      },
+    ],
+    name: "retrieveProject",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "title",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "creator",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "whitePaper",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "projectPlan",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "contractCode",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "ownFunding",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "targetFunding",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "totalFunding",
+            type: "uint256",
+          },
+          {
+            internalType: "address payable",
+            name: "fundingWallet",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "deadline",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "applied",
+            type: "bool",
+          },
+        ],
+        internalType: "struct PublicICO.Project",
+        name: "",
+        type: "tuple",
       },
     ],
     stateMutability: "view",
