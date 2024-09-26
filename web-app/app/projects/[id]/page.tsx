@@ -18,21 +18,39 @@ import {
   Tooltip,
   Tr,
 } from "@chakra-ui/react";
-import { BiLinkExternal, BiPlus } from "react-icons/bi";
+import { BiPlus } from "react-icons/bi";
+import { readContract } from "wagmi/actions";
+import { formatUnits } from "ethers";
+import { Project } from "@/app/models/project";
+import { constants } from "@/app/lib/constants";
+import { contractAbi } from "@/app/config/contract-abi";
+import { config } from "@/app/config/wagmi";
+import {
+  calculateFundingProgress,
+  convertTimestampToDate,
+} from "@/app/config/utils";
+import ProjectActionButtons from "./components/ProjectActionButtons";
 
 interface Props {
   params: { id: number };
 }
 
-export default function ProjectDetail({ params: { id } }: Props) {
+export default async function ProjectDetail({ params: { id } }: Props) {
+  const project = (await readContract(config, {
+    abi: contractAbi,
+    address: constants.contractAddress,
+    functionName: "retrieveProject",
+    args: [id],
+  })) as Project;
   const address = "0x35BE4f1Aa18AD52D606E9B2eA257A3416e8030fF";
 
   return (
     <Stack spacing="6">
-      <Heading size="lg">DICO - Decentralized ICO</Heading>
+      <Heading size="lg">{project?.title}</Heading>
       <HStack justifyContent="space-between">
         <Badge variant="outline" colorScheme="teal">
-          Expiration Date: 12/19/2024
+          Expiration Date:{" "}
+          {convertTimestampToDate(project?.deadline).toLocaleDateString()}
         </Badge>
         <Button leftIcon={<BiPlus />} colorScheme="teal" variant="outline">
           Contribute
@@ -43,41 +61,33 @@ export default function ProjectDetail({ params: { id } }: Props) {
           <StatGroup>
             <Stat>
               <StatLabel>Locked Funding</StatLabel>
-              <StatNumber>31.54 ETH</StatNumber>
+              <StatNumber>
+                {formatUnits(project?.totalFunding, "ether")} ETH
+              </StatNumber>
             </Stat>
             <Stat>
               <StatLabel>Creator Funding</StatLabel>
-              <StatNumber>412.33 ETH</StatNumber>
+              <StatNumber>
+                {formatUnits(project?.ownFunding, "ether")} ETH
+              </StatNumber>
             </Stat>
             <Stat>
               <StatLabel>Target Funding</StatLabel>
-              <StatNumber>42.55 ETH</StatNumber>
+              <StatNumber>
+                {formatUnits(project?.targetFunding, "ether")} ETH
+              </StatNumber>
             </Stat>
           </StatGroup>
-          <Progress value={50} size="lg" colorScheme="teal" hasStripe />
-          <HStack justifyContent="space-between">
-            <Button
-              rightIcon={<BiLinkExternal />}
-              colorScheme="teal"
-              variant="outline"
-            >
-              White Paper
-            </Button>
-            <Button
-              rightIcon={<BiLinkExternal />}
-              colorScheme="teal"
-              variant="outline"
-            >
-              Project Plan
-            </Button>
-            <Button
-              rightIcon={<BiLinkExternal />}
-              colorScheme="teal"
-              variant="outline"
-            >
-              Contract Code
-            </Button>
-          </HStack>
+          <Progress
+            value={calculateFundingProgress(
+              project?.targetFunding,
+              project?.totalFunding
+            )}
+            size="lg"
+            colorScheme="teal"
+            hasStripe
+          />
+          <ProjectActionButtons project={project} />
         </Stack>
         <Stack flex="1">
           <Heading fontWeight="500" size="xs">
