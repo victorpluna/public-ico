@@ -1,8 +1,12 @@
 "use client";
 import { Progress, Td, Tr, Text } from "@chakra-ui/react";
-import { BigNumberish, formatUnits } from "ethers";
+import { formatUnits } from "ethers";
 import { useRouter } from "next/navigation";
 import { Project } from "../models/project";
+import {
+  calculateFundingProgress,
+  convertTimestampToDate,
+} from "../config/utils";
 
 interface Props {
   project: Project;
@@ -37,18 +41,3 @@ export default function ProjectTableItem({ project }: Props) {
     </Tr>
   );
 }
-
-const convertTimestampToDate = (timestamp: BigNumberish) =>
-  new Date(Number(timestamp) * 1000);
-
-const calculateFundingProgress = (
-  targetFunding: BigNumberish,
-  totalFunding: BigNumberish
-) =>
-  Number(
-    (
-      (Number(formatUnits(totalFunding, "ether")) /
-        Number(formatUnits(targetFunding, "ether"))) *
-      100
-    ).toFixed(2)
-  );
