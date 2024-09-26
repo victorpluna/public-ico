@@ -1,6 +1,4 @@
-"use client";
 import {
-  Progress,
   Stat,
   StatArrow,
   StatGroup,
@@ -11,35 +9,23 @@ import {
   TableCaption,
   TableContainer,
   Tbody,
-  Td,
   Th,
   Thead,
   Tr,
-  Text,
 } from "@chakra-ui/react";
-import { useReadContract } from "wagmi";
-import { formatUnits } from "ethers";
-import { BigNumberish } from "ethers";
+import { readContract } from "wagmi/actions";
 import { contractAbi } from "./config/contract-abi";
 import { Project } from "./models/project";
-import { TableSkeleton } from "./components/TableSkeleton";
 import { constants } from "./lib/constants";
-import { Link } from "@chakra-ui/next-js";
+import { config } from "./config/wagmi";
+import ProjectTableItem from "./components/ProjectTableItem";
 
-interface ListProjectsResponse {
-  data: Project[] | undefined;
-}
-
-export default function Home() {
-  const { data: projects }: ListProjectsResponse = useReadContract({
+export default async function Home() {
+  const projects = (await readContract(config, {
     abi: contractAbi,
     address: constants.contractAddress,
     functionName: "listActiveProjects",
-  });
-
-  if (projects === undefined) {
-    return <TableSkeleton />;
-  }
+  })) as Project[];
 
   return (
     <div>
@@ -85,70 +71,12 @@ export default function Home() {
             </Tr>
           </Thead>
           <Tbody>
-            {projects?.map(
-              (
-                {
-                  id,
-                  title,
-                  targetFunding,
-                  totalFunding,
-                  ownFunding,
-                  deadline,
-                },
-                index
-              ) => (
-                <Link
-                  href={`/projects/${id}`}
-                  cursor="pointer"
-                  display="contents"
-                >
-                  <Tr key={index}>
-                    <Td>{title}</Td>
-                    <Td isNumeric>{formatUnits(ownFunding, "ether")} ETH</Td>
-                    <Td isNumeric>{formatUnits(targetFunding, "ether")} ETH</Td>
-                    <Td isNumeric>{formatUnits(totalFunding, "ether")} ETH</Td>
-                    <Td>
-                      <Progress
-                        value={calculateFundingProgress(
-                          targetFunding,
-                          totalFunding
-                        )}
-                        size="xs"
-                        colorScheme="teal"
-                      />
-                      <Text fontSize="xs">
-                        {Math.min(
-                          calculateFundingProgress(targetFunding, totalFunding),
-                          100
-                        )}
-                        %
-                      </Text>
-                    </Td>
-                    <Td>
-                      {convertTimestampToDate(deadline).toLocaleDateString()}
-                    </Td>
-                  </Tr>
-                </Link>
-              )
-            )}
+            {projects?.map((project) => (
+              <ProjectTableItem key={project.id} project={project} />
+            ))}
           </Tbody>
         </Table>
       </TableContainer>
     </div>
   );
 }
-
-const convertTimestampToDate = (timestamp: BigNumberish) =>
-  new Date(Number(timestamp) * 1000);
-
-const calculateFundingProgress = (
-  targetFunding: BigNumberish,
-  totalFunding: BigNumberish
-) =>
-  Number(
-    (
-      (Number(formatUnits(totalFunding, "ether")) /
-        Number(formatUnits(targetFunding, "ether"))) *
-      100
-    ).toFixed(2)
-  );
