@@ -1,4 +1,7 @@
 import {
+  Button,
+  HStack,
+  Stack,
   Stat,
   StatArrow,
   StatGroup,
@@ -6,7 +9,6 @@ import {
   StatLabel,
   StatNumber,
   Table,
-  TableCaption,
   TableContainer,
   Tbody,
   Th,
@@ -19,6 +21,7 @@ import { Project } from "./models/project";
 import { constants } from "./lib/constants";
 import { config } from "./config/wagmi";
 import ProjectTableItem from "./components/ProjectTableItem";
+import { BiPlus } from "react-icons/bi";
 
 export default async function Home() {
   const projects = (await readContract(config, {
@@ -28,8 +31,8 @@ export default async function Home() {
   })) as Project[];
 
   return (
-    <div>
-      <StatGroup mb="50px">
+    <Stack spacing={3}>
+      <StatGroup>
         <Stat>
           <StatLabel>Total Value Locked (30d)</StatLabel>
           <StatNumber>31.54 ETH</StatNumber>
@@ -55,11 +58,13 @@ export default async function Home() {
           </StatHelpText>
         </Stat>
       </StatGroup>
+      <HStack justifyContent="flex-end">
+        <Button leftIcon={<BiPlus />} colorScheme="teal" variant="outline">
+          Create Project
+        </Button>
+      </HStack>
       <TableContainer>
         <Table variant="striped">
-          <TableCaption>
-            Projects that have not yet completed the target funding amount
-          </TableCaption>
           <Thead>
             <Tr>
               <Th>Project Name</Th>
@@ -77,6 +82,6 @@ export default async function Home() {
           </Tbody>
         </Table>
       </TableContainer>
-    </div>
+    </Stack>
   );
 }
