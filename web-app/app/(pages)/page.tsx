@@ -16,12 +16,12 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { readContract } from "wagmi/actions";
-import { contractAbi } from "./config/contract-abi";
-import { Project } from "./models/project";
-import { constants } from "./lib/constants";
-import { config } from "./config/wagmi";
-import ProjectTableItem from "./components/ProjectTableItem";
 import { BiPlus } from "react-icons/bi";
+import { contractAbi } from "../config/contract-abi";
+import { Project } from "../models/project";
+import { constants } from "../lib/constants";
+import { config } from "../config/wagmi";
+import ProjectTableItem from "./components/ProjectTableItem";
 
 export default async function Home() {
   const projects = (await readContract(config, {

@@ -2,11 +2,11 @@
 import { Progress, Td, Tr, Text } from "@chakra-ui/react";
 import { formatUnits } from "ethers";
 import { useRouter } from "next/navigation";
-import { Project } from "../models/project";
+import { Project } from "@/app/models/project";
 import {
   calculateFundingProgress,
   convertTimestampToDate,
-} from "../config/utils";
+} from "@/app/config/utils";
 
 interface Props {
   project: Project;

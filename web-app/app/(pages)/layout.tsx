@@ -1,12 +1,12 @@
-import "./reset.scss";
+import "../reset.scss";
 
 import { Box, Flex } from "@chakra-ui/react";
 
-import { Providers } from "./providers";
-import { fonts } from "./fonts";
-import SideMenu from "@/app/components/Layout/SideMenu";
-import Header from "@/app/components/Layout/Header";
-import Footer from "@/app/components/Layout/Footer";
+import { Providers } from "../providers";
+import { fonts } from "../fonts";
+import SideMenu from "./components/Layout/SideMenu";
+import Header from "./components/Layout/Header";
+import Footer from "./components/Layout/Footer";
 
 export default function RootLayout({
   children,
