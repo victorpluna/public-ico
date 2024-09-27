@@ -15,12 +15,15 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { readContract } from "wagmi/actions";
+import dynamic from "next/dynamic";
 import { contractAbi } from "../config/contract-abi";
 import { Project } from "../models/project";
 import { constants } from "../lib/constants";
 import { config } from "../config/wagmi";
 import ProjectTableItem from "./components/ProjectTableItem";
-import CreateProject from "./components/CreateProject";
+const CreateProject = dynamic(() => import("./components/CreateProject"), {
+  ssr: false,
+});
 
 export default async function Home() {
   const projects = (await readContract(config, {
@@ -57,7 +60,7 @@ export default async function Home() {
           </StatHelpText>
         </Stat>
       </StatGroup>
-      <HStack justifyContent="flex-end">
+      <HStack justifyContent="flex-end" h="40px">
         <CreateProject />
       </HStack>
       <TableContainer>

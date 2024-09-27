@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Drawer,
@@ -23,11 +23,23 @@ import {
 } from "@chakra-ui/react";
 import { Formik, Field, FieldInputProps, FormikProps } from "formik";
 import { BiPlus } from "react-icons/bi";
-import { validateRequired, validateURL } from "@/app/config/validation";
 import { useAccount } from "wagmi";
+import { writeContract } from "wagmi/actions";
+import { parseEther } from "ethers";
+import { usePathname, useRouter } from "next/navigation";
+import { validateRequired, validateURL } from "@/app/config/validation";
+import { config } from "@/app/config/wagmi";
+import { contractAbi } from "@/app/config/contract-abi";
+import { constants } from "@/app/lib/constants";
 
 interface FormValues {
+  title: string;
+  whitePaper: string;
+  projectPlan: string;
+  contractCode: string;
   targetFunding: number;
+  ownFunding: number;
+  fundingWallet: string;
 }
 
 interface FieldNumberProps {
@@ -36,8 +48,42 @@ interface FieldNumberProps {
 }
 
 export default function CreateProject() {
+  const router = useRouter();
+  const currentPath = usePathname();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isConnected } = useAccount();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmitForm = async (values: FormValues) => {
+    setIsLoading(true);
+    const {
+      title,
+      whitePaper,
+      projectPlan,
+      contractCode,
+      targetFunding,
+      ownFunding,
+      fundingWallet,
+    } = values;
+    const transactionId = await writeContract(config, {
+      abi: contractAbi,
+      address: constants.contractAddress,
+      functionName: "createProject",
+      value: parseEther(ownFunding.toString()),
+      args: [
+        title,
+        whitePaper,
+        projectPlan,
+        contractCode,
+        parseEther(targetFunding.toString()),
+        fundingWallet,
+      ],
+    });
+    console.log("transactionId", transactionId);
+    setIsLoading(false);
+    router.push(currentPath);
+    onClose();
+  };
 
   return (
     <>
@@ -64,7 +110,7 @@ export default function CreateProject() {
           <DrawerHeader>Create new project</DrawerHeader>
 
           <DrawerBody>
-            <Formik initialValues={initialValues} onSubmit={console.log}>
+            <Formik initialValues={initialValues} onSubmit={handleSubmitForm}>
               {({ handleSubmit, errors, touched }) => (
                 <form onSubmit={handleSubmit}>
                   <VStack spacing={4} align="flex-start">
@@ -153,6 +199,31 @@ export default function CreateProject() {
                         </FormControl>
                       )}
                     </Field>
+                    <Field name="ownFunding">
+                      {({ field, form }: FieldNumberProps) => (
+                        <FormControl id="ownFunding">
+                          <FormLabel htmlFor="ownFunding">
+                            Own Funding
+                          </FormLabel>
+                          <NumberInput
+                            id="ownFunding"
+                            {...field}
+                            step={0.01}
+                            min={0.01}
+                            variant="filled"
+                            onChange={(value) =>
+                              form.setFieldValue(field.name, value)
+                            }
+                          >
+                            <NumberInputField />
+                            <NumberInputStepper>
+                              <NumberIncrementStepper />
+                              <NumberDecrementStepper />
+                            </NumberInputStepper>
+                          </NumberInput>
+                        </FormControl>
+                      )}
+                    </Field>
                     <FormControl
                       isInvalid={
                         !!errors.fundingWallet && touched.fundingWallet
@@ -174,7 +245,12 @@ export default function CreateProject() {
                         {errors.fundingWallet}
                       </FormErrorMessage>
                     </FormControl>
-                    <Button type="submit" colorScheme="teal" width="full">
+                    <Button
+                      isLoading={isLoading}
+                      type="submit"
+                      colorScheme="teal"
+                      width="full"
+                    >
                       Create
                     </Button>
                   </VStack>
@@ -193,6 +269,7 @@ const initialValues = {
   whitePaper: "",
   projectPlan: "",
   contractCode: "",
-  targetFunding: 0.01,
+  targetFunding: 0.1,
+  ownFunding: 0.01,
   fundingWallet: "",
 };
