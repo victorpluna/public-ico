@@ -17,12 +17,14 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Tooltip,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
 import { Formik, Field, FieldInputProps, FormikProps } from "formik";
 import { BiPlus } from "react-icons/bi";
 import { validateRequired, validateURL } from "@/app/config/validation";
+import { useAccount } from "wagmi";
 
 interface FormValues {
   targetFunding: number;
@@ -35,17 +37,26 @@ interface FieldNumberProps {
 
 export default function CreateProject() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isConnected } = useAccount();
 
   return (
     <>
-      <Button
-        leftIcon={<BiPlus />}
-        onClick={onOpen}
-        colorScheme="teal"
-        variant="outline"
+      <Tooltip
+        label="You must connect your wallet"
+        placement="top"
+        isDisabled={isConnected}
+        hasArrow
       >
-        Create Project
-      </Button>
+        <Button
+          leftIcon={<BiPlus />}
+          onClick={onOpen}
+          colorScheme="teal"
+          variant="outline"
+          isDisabled={!isConnected}
+        >
+          Create Project
+        </Button>
+      </Tooltip>
       <Drawer isOpen={isOpen} placement="right" size="sm" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
