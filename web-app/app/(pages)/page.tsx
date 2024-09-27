@@ -1,4 +1,5 @@
 import {
+  Center,
   HStack,
   Stack,
   Stat,
@@ -10,9 +11,11 @@ import {
   Table,
   TableContainer,
   Tbody,
+  Td,
   Th,
   Thead,
   Tr,
+  Text,
 } from "@chakra-ui/react";
 import { readContract } from "wagmi/actions";
 import dynamic from "next/dynamic";
@@ -25,12 +28,20 @@ const CreateProject = dynamic(() => import("./components/CreateProject"), {
   ssr: false,
 });
 
+const getOnChainProjects = async (): Promise<Project[]> => {
+  try {
+    return (await readContract(config, {
+      abi: contractAbi,
+      address: constants.contractAddress,
+      functionName: "listActiveProjects",
+    })) as Project[];
+  } catch {
+    return [];
+  }
+};
+
 export default async function Home() {
-  const projects = (await readContract(config, {
-    abi: contractAbi,
-    address: constants.contractAddress,
-    functionName: "listActiveProjects",
-  })) as Project[];
+  const projects = await getOnChainProjects();
 
   return (
     <Stack spacing={3}>
@@ -76,9 +87,19 @@ export default async function Home() {
             </Tr>
           </Thead>
           <Tbody>
-            {projects?.map((project) => (
-              <ProjectTableItem key={project.id} project={project} />
-            ))}
+            {projects.length ? (
+              projects.map((project) => (
+                <ProjectTableItem key={project.id} project={project} />
+              ))
+            ) : (
+              <Tr>
+                <Td colSpan={6}>
+                  <Center>
+                    <Text fontSize={12}>No projects created yet</Text>
+                  </Center>
+                </Td>
+              </Tr>
+            )}
           </Tbody>
         </Table>
       </TableContainer>
