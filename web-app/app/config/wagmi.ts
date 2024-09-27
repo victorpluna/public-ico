@@ -1,12 +1,12 @@
 import { http, createConfig } from "wagmi";
 import { metaMask } from "wagmi/connectors";
-import { sepolia } from "viem/chains";
+import { hardhatChain } from "./hardhat-chain";
 
 export const config = createConfig({
-  chains: [sepolia],
+  chains: [hardhatChain],
   connectors: [metaMask()],
   ssr: true,
   transports: {
-    [sepolia.id]: http(),
+    [hardhatChain.id]: http(),
   },
 });
