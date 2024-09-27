@@ -1,5 +1,4 @@
 import {
-  Button,
   HStack,
   Stack,
   Stat,
@@ -16,12 +15,12 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { readContract } from "wagmi/actions";
-import { BiPlus } from "react-icons/bi";
 import { contractAbi } from "../config/contract-abi";
 import { Project } from "../models/project";
 import { constants } from "../lib/constants";
 import { config } from "../config/wagmi";
 import ProjectTableItem from "./components/ProjectTableItem";
+import CreateProject from "./components/CreateProject";
 
 export default async function Home() {
   const projects = (await readContract(config, {
@@ -59,9 +58,7 @@ export default async function Home() {
         </Stat>
       </StatGroup>
       <HStack justifyContent="flex-end">
-        <Button leftIcon={<BiPlus />} colorScheme="teal" variant="outline">
-          Create Project
-        </Button>
+        <CreateProject />
       </HStack>
       <TableContainer>
         <Table variant="striped">
