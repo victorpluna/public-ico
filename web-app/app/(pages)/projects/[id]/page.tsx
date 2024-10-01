@@ -1,6 +1,5 @@
 import {
   Badge,
-  Button,
   Heading,
   HStack,
   Progress,
@@ -18,7 +17,6 @@ import {
   Tooltip,
   Tr,
 } from "@chakra-ui/react";
-import { BiPlus } from "react-icons/bi";
 import { readContract } from "wagmi/actions";
 import { formatUnits } from "ethers";
 import { Project } from "@/app/models/project";
@@ -30,6 +28,7 @@ import {
   convertTimestampToDate,
 } from "@/app/config/utils";
 import ProjectActionButtons from "./components/ProjectActionButtons";
+import ContributeProject from "./components/ContributeProject";
 
 interface Props {
   params: { id: number };
@@ -52,9 +51,7 @@ export default async function ProjectDetail({ params: { id } }: Props) {
           Expiration Date:{" "}
           {convertTimestampToDate(project?.deadline).toLocaleDateString()}
         </Badge>
-        <Button leftIcon={<BiPlus />} colorScheme="teal" variant="outline">
-          Contribute
-        </Button>
+        <ContributeProject projectId={project?.id} />
       </HStack>
       <HStack alignItems="flex-start" spacing="10">
         <Stack flex="2" spacing="10">

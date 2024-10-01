@@ -175,16 +175,31 @@ export const contractAbi = [
         type: "uint256",
       },
       {
-        internalType: "address",
+        internalType: "uint256",
         name: "",
-        type: "address",
+        type: "uint256",
       },
     ],
     name: "contributions",
     outputs: [
       {
+        internalType: "address",
+        name: "contributor",
+        type: "address",
+      },
+      {
         internalType: "uint256",
-        name: "",
+        name: "value",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "claimed",
+        type: "bool",
+      },
+      {
+        internalType: "uint256",
+        name: "createdAt",
         type: "uint256",
       },
     ],
@@ -372,6 +387,47 @@ export const contractAbi = [
           },
         ],
         internalType: "struct PublicICO.Project[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "projectId",
+        type: "uint256",
+      },
+    ],
+    name: "listProjectContributions",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "contributor",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "value",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "claimed",
+            type: "bool",
+          },
+          {
+            internalType: "uint256",
+            name: "createdAt",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct PublicICO.Contribution[]",
         name: "",
         type: "tuple[]",
       },
