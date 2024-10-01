@@ -17,8 +17,15 @@ contract PublicICO {
         bool applied;
     }
 
+    struct Contribution {
+        address contributor;
+        uint value;
+        bool claimed;
+        uint createdAt;
+    }
+
     mapping(uint => Project) public projects;
-    mapping(uint => mapping(address => uint)) public contributions;
+    mapping(uint => Contribution[]) public contributions;
     uint public projectCount;
 
     event ProjectCreated(
@@ -129,7 +136,14 @@ contract PublicICO {
 
         Project storage project = projects[projectId];
         project.totalFunding += msg.value;
-        contributions[projectId][msg.sender] += msg.value;
+
+        Contribution memory newContribution = Contribution({
+            contributor: msg.sender,
+            value: msg.value,
+            claimed: false,
+            createdAt: block.timestamp
+        });
+        contributions[projectId].push(newContribution);
 
         emit ContributionReceived(projectId, msg.sender, msg.value);
     }
@@ -143,13 +157,27 @@ contract PublicICO {
             "Target value has been reached. Unable to redeem."
         );
 
-        uint contribution = contributions[projectId][msg.sender];
-        require(contribution > 0, "No contributions to be redeemed.");
+        uint totalContribution = 0;
 
-        contributions[projectId][msg.sender] = 0;
-        payable(msg.sender).transfer(contribution);
+        Contribution[] storage projectContributions = contributions[projectId];
+        for (uint i = 0; i < projectContributions.length; i++) {
+            if (
+                projectContributions[i].contributor == msg.sender &&
+                !projectContributions[i].claimed
+            ) {
+                totalContribution += projectContributions[i].value;
 
-        emit FundsClaimed(projectId, msg.sender, contribution);
+                projectContributions[i].claimed = true;
+            }
+        }
+
+        require(totalContribution > 0, "No contributions to be claimed.");
+
+        project.totalFunding -= totalContribution;
+
+        payable(msg.sender).transfer(totalContribution);
+
+        emit FundsClaimed(projectId, msg.sender, totalContribution);
     }
 
     function applyProject(
@@ -207,5 +235,11 @@ contract PublicICO {
         uint projectId
     ) external view projectExists(projectId) returns (Project memory) {
         return projects[projectId];
+    }
+
+    function listProjectContributions(
+        uint projectId
+    ) external view projectExists(projectId) returns (Contribution[] memory) {
+        return contributions[projectId];
     }
 }
