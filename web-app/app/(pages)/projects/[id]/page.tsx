@@ -1,5 +1,6 @@
 import {
   Badge,
+  Center,
   Heading,
   HStack,
   Progress,
@@ -16,6 +17,7 @@ import {
   Thead,
   Tooltip,
   Tr,
+  Text,
 } from "@chakra-ui/react";
 import { readContract } from "wagmi/actions";
 import { formatUnits } from "ethers";
@@ -26,22 +28,43 @@ import { config } from "@/app/config/wagmi";
 import {
   calculateFundingProgress,
   convertTimestampToDate,
+  shortAddress,
 } from "@/app/config/utils";
 import ProjectActionButtons from "./components/ProjectActionButtons";
 import ContributeProject from "./components/ContributeProject";
+import { Contribution } from "@/app/models/contribution";
 
 interface Props {
   params: { id: number };
 }
 
-export default async function ProjectDetail({ params: { id } }: Props) {
-  const project = (await readContract(config, {
+const getOnChainContributions = async (
+  projectId: number
+): Promise<Contribution[]> => {
+  try {
+    return (await readContract(config, {
+      abi: contractAbi,
+      address: constants.contractAddress,
+      functionName: "listProjectContributions",
+      args: [projectId],
+    })) as Contribution[];
+  } catch {
+    return [];
+  }
+};
+
+const getOnChainProject = async (projectId: number): Promise<Project> => {
+  return (await readContract(config, {
     abi: contractAbi,
     address: constants.contractAddress,
     functionName: "retrieveProject",
-    args: [id],
+    args: [projectId],
   })) as Project;
-  const address = "0x35BE4f1Aa18AD52D606E9B2eA257A3416e8030fF";
+};
+
+export default async function ProjectDetail({ params: { id } }: Props) {
+  const project = await getOnChainProject(id);
+  const contributions = await getOnChainContributions(id);
 
   return (
     <Stack spacing="6">
@@ -96,72 +119,37 @@ export default async function ProjectDetail({ params: { id } }: Props) {
                 <Tr>
                   <Th>Wallet Address</Th>
                   <Th isNumeric>Amount</Th>
+                  <Th>Date</Th>
                 </Tr>
               </Thead>
               <Tbody>
-                <Tr>
-                  <Td>
-                    <Tooltip label={address}>{`${address.slice(
-                      0,
-                      5
-                    )}...${address.slice(-5)}`}</Tooltip>
-                  </Td>
-                  <Td isNumeric>0.11 ETH</Td>
-                </Tr>
-                <Tr>
-                  <Td>
-                    <Tooltip label={address}>{`${address.slice(
-                      0,
-                      5
-                    )}...${address.slice(-5)}`}</Tooltip>
-                  </Td>
-                  <Td isNumeric>0.15 ETH</Td>
-                </Tr>
-                <Tr>
-                  <Td>
-                    <Tooltip label={address}>{`${address.slice(
-                      0,
-                      5
-                    )}...${address.slice(-5)}`}</Tooltip>
-                  </Td>
-                  <Td isNumeric>1.04 ETH</Td>
-                </Tr>
-                <Tr>
-                  <Td>
-                    <Tooltip label={address}>{`${address.slice(
-                      0,
-                      5
-                    )}...${address.slice(-5)}`}</Tooltip>
-                  </Td>
-                  <Td isNumeric>1.04 ETH</Td>
-                </Tr>
-                <Tr>
-                  <Td>
-                    <Tooltip label={address}>{`${address.slice(
-                      0,
-                      5
-                    )}...${address.slice(-5)}`}</Tooltip>
-                  </Td>
-                  <Td isNumeric>1.04 ETH</Td>
-                </Tr>
-                <Tr>
-                  <Td>
-                    <Tooltip label={address}>{`${address.slice(
-                      0,
-                      5
-                    )}...${address.slice(-5)}`}</Tooltip>
-                  </Td>
-                  <Td isNumeric>1.04 ETH</Td>
-                </Tr>
-                <Tr>
-                  <Td>
-                    <Tooltip label={address}>{`${address.slice(
-                      0,
-                      5
-                    )}...${address.slice(-5)}`}</Tooltip>
-                  </Td>
-                  <Td isNumeric>1.04 ETH</Td>
-                </Tr>
+                {contributions.length ? (
+                  contributions
+                    .filter(({ claimed }) => !claimed)
+                    .map(({ contributor, value, createdAt }, index) => (
+                      <Tr key={index}>
+                        <Td>
+                          <Tooltip label={contributor}>
+                            {shortAddress(contributor)}
+                          </Tooltip>
+                        </Td>
+                        <Td isNumeric>{formatUnits(value, "ether")} ETH</Td>
+                        <Td>
+                          {convertTimestampToDate(
+                            createdAt
+                          ).toLocaleDateString()}
+                        </Td>
+                      </Tr>
+                    ))
+                ) : (
+                  <Tr>
+                    <Td colSpan={6}>
+                      <Center>
+                        <Text fontSize={12}>There is no contributions yet</Text>
+                      </Center>
+                    </Td>
+                  </Tr>
+                )}
               </Tbody>
             </Table>
           </TableContainer>

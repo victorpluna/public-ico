@@ -1,4 +1,5 @@
 "use client";
+import { shortAddress } from "@/app/config/utils";
 import {
   Box,
   Button,
@@ -25,7 +26,7 @@ export default function Header() {
         {address ? (
           <Menu>
             <MenuButton as={Button} rightIcon={<FaChevronDown />}>
-              {`${address.slice(0, 5)}...${address.slice(-5)}`}
+              {shortAddress(address)}
             </MenuButton>
             <MenuList minW="170px">
               <MenuItem icon={<FaPowerOff />} onClick={() => disconnect()}>

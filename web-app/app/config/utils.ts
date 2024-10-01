@@ -14,3 +14,6 @@ export const calculateFundingProgress = (
       100
     ).toFixed(2)
   );
+
+export const shortAddress = (address: string) =>
+  `${address.slice(0, 5)}...${address.slice(-5)}`;
