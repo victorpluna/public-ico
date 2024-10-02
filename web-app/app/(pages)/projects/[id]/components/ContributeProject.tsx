@@ -17,6 +17,7 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Tooltip,
   useDisclosure,
   useToast,
   VStack,
@@ -45,7 +46,7 @@ interface FieldNumberProps {
 export default function ContributeProject({ projectId }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const router = useRouter();
   const currentPath = usePathname();
   const toast = useToast();
@@ -80,14 +81,22 @@ export default function ContributeProject({ projectId }: Props) {
 
   return (
     <>
-      <Button
-        onClick={onOpen}
-        leftIcon={<BiPlus />}
-        colorScheme="teal"
-        variant="outline"
+      <Tooltip
+        label="You must connect your wallet"
+        placement="top"
+        isDisabled={isConnected}
+        hasArrow
       >
-        Contribute
-      </Button>
+        <Button
+          onClick={onOpen}
+          isDisabled={!isConnected}
+          leftIcon={<BiPlus />}
+          colorScheme="teal"
+          variant="outline"
+        >
+          Contribute
+        </Button>
+      </Tooltip>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
