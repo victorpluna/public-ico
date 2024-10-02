@@ -26,6 +26,7 @@ import { Field, FieldInputProps, Formik, FormikProps } from "formik";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { BiPlus } from "react-icons/bi";
+import { useAccount } from "wagmi";
 import { writeContract } from "wagmi/actions";
 
 interface Props {
@@ -44,6 +45,7 @@ interface FieldNumberProps {
 export default function ContributeProject({ projectId }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
+  const { address } = useAccount();
   const router = useRouter();
   const currentPath = usePathname();
   const toast = useToast();
@@ -52,14 +54,14 @@ export default function ContributeProject({ projectId }: Props) {
     setIsLoading(true);
 
     try {
-      const transactionId = await writeContract(config, {
+      await writeContract(config, {
         abi: contractAbi,
         address: constants.contractAddress,
         functionName: "contribute",
         value: parseEther(value.toString()),
-        args: [Number(projectId)],
+        args: [projectId],
+        account: address,
       });
-      console.log("transactionId", transactionId);
       router.push(currentPath);
     } catch (error) {
       console.log("error", error);

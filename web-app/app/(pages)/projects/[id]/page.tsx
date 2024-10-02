@@ -74,7 +74,7 @@ export default async function ProjectDetail({ params: { id } }: Props) {
           Expiration Date:{" "}
           {convertTimestampToDate(project?.deadline).toLocaleDateString()}
         </Badge>
-        <ContributeProject projectId={project?.id} />
+        <ContributeProject projectId={id} />
       </HStack>
       <HStack alignItems="flex-start" spacing="10">
         <Stack flex="2" spacing="10">
