@@ -246,6 +246,41 @@ export const contractAbi = [
   },
   {
     inputs: [],
+    name: "getMyContributions",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "contributor",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "value",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "claimed",
+            type: "bool",
+          },
+          {
+            internalType: "uint256",
+            name: "createdAt",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct PublicICO.Contribution[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "listActiveProjects",
     outputs: [
       {

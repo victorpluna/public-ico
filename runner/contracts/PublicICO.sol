@@ -242,4 +242,38 @@ contract PublicICO {
     ) external view projectExists(projectId) returns (Contribution[] memory) {
         return contributions[projectId];
     }
+
+    function getMyContributions()
+        external
+        view
+        returns (Contribution[] memory)
+    {
+        uint totalContributions = 0;
+
+        for (uint i = 0; i < projectCount; i++) {
+            Contribution[] storage projectContributions = contributions[i];
+            for (uint j = 0; j < projectContributions.length; j++) {
+                if (projectContributions[j].contributor == msg.sender) {
+                    totalContributions++;
+                }
+            }
+        }
+
+        Contribution[] memory myContributions = new Contribution[](
+            totalContributions
+        );
+        uint index = 0;
+
+        for (uint i = 0; i < projectCount; i++) {
+            Contribution[] storage projectContributions = contributions[i];
+            for (uint j = 0; j < projectContributions.length; j++) {
+                if (projectContributions[j].contributor == msg.sender) {
+                    myContributions[index] = projectContributions[j];
+                    index++;
+                }
+            }
+        }
+
+        return myContributions;
+    }
 }
