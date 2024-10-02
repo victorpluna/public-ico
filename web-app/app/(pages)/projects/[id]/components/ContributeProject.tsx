@@ -61,7 +61,6 @@ export default function ContributeProject({ projectId }: Props) {
         functionName: "contribute",
         value: parseEther(value.toString()),
         args: [projectId],
-        account: address,
       });
       router.push(currentPath);
     } catch (error) {

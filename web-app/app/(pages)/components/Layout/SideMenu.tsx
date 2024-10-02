@@ -1,6 +1,6 @@
 "use client";
 import { Box, Center, VStack } from "@chakra-ui/react";
-import { FaLayerGroup } from "react-icons/fa6";
+import { FaLayerGroup, FaCoins } from "react-icons/fa6";
 
 import SideMenuItem from "./SideMenuItem";
 import { usePathname } from "next/navigation";
@@ -27,10 +27,10 @@ export default function SideMenu() {
           isActive={currentPath === "/"}
         />
         <SideMenuItem
-          icon={FaLayerGroup}
-          label="My ICOs"
-          href="/myOffers"
-          isActive={currentPath === "/myOffers"}
+          icon={FaCoins}
+          label="My Contributions"
+          href="/myContributions"
+          isActive={currentPath === "/myContributions"}
         />
       </VStack>
     </Box>
