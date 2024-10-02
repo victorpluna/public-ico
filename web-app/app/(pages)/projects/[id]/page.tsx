@@ -21,6 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { readContract } from "wagmi/actions";
 import { formatUnits } from "ethers";
+import dynamic from "next/dynamic";
 import { Project } from "@/app/models/project";
 import { constants } from "@/app/lib/constants";
 import { contractAbi } from "@/app/config/contract-abi";
@@ -31,8 +32,13 @@ import {
   shortAddress,
 } from "@/app/config/utils";
 import ProjectActionButtons from "./components/ProjectActionButtons";
-import ContributeProject from "./components/ContributeProject";
 import { Contribution } from "@/app/models/contribution";
+const ContributeProject = dynamic(
+  () => import("./components/ContributeProject"),
+  {
+    ssr: false,
+  }
+);
 
 interface Props {
   params: { id: number };
