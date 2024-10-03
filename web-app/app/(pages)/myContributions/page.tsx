@@ -20,7 +20,7 @@ import { readContract } from "wagmi/actions";
 import { contractAbi } from "../../config/contract-abi";
 import { constants } from "../../lib/constants";
 import { config } from "../../config/wagmi";
-import { Contribution } from "@/app/models/contribution";
+import { Contribution, ProjectContributions } from "@/app/models/contribution";
 import ContributionTableItem from "./components/ContributionTableItem";
 
 const getOnChainContributions = async (): Promise<Contribution[]> => {
@@ -36,7 +36,9 @@ const getOnChainContributions = async (): Promise<Contribution[]> => {
 };
 
 export default async function MyContributions() {
-  const contributions = await getOnChainContributions();
+  const contributions = groupContributionsByProject(
+    await getOnChainContributions()
+  );
   console.log("contributions", contributions);
 
   return (
@@ -68,13 +70,12 @@ export default async function MyContributions() {
         </Stat>
       </StatGroup>
       <TableContainer>
-        <Table variant="striped">
+        <Table>
           <Thead>
             <Tr>
               <Th>Project</Th>
               <Th isNumeric>Amount</Th>
-              <Th>Date</Th>
-              <Th>Action</Th>
+              <Th isNumeric>Action</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -82,7 +83,7 @@ export default async function MyContributions() {
               contributions.map((contribution, index) => (
                 <ContributionTableItem
                   key={index}
-                  contribution={contribution}
+                  projectContributions={contribution}
                 />
               ))
             ) : (
@@ -99,4 +100,33 @@ export default async function MyContributions() {
       </TableContainer>
     </Stack>
   );
+}
+
+function groupContributionsByProject(
+  contributions: Contribution[]
+): ProjectContributions[] {
+  const projectMap: Map<number, ProjectContributions> = new Map();
+
+  contributions.forEach((contribution) => {
+    const { projectId, projectTitle, value, claimed } = contribution;
+
+    if (projectMap.has(projectId)) {
+      const existingProject = projectMap.get(projectId);
+
+      if (existingProject) {
+        existingProject.contributions.push(contribution);
+        existingProject.total += value;
+      }
+    } else {
+      projectMap.set(projectId, {
+        projectId,
+        projectTitle,
+        total: value,
+        claimed,
+        contributions: [contribution],
+      });
+    }
+  });
+
+  return Array.from(projectMap.values());
 }

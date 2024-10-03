@@ -6,3 +6,11 @@ export interface Contribution {
   claimed: boolean;
   createdAt: number;
 }
+
+export type ProjectContributions = {
+  projectId: number;
+  projectTitle: string;
+  total: number;
+  claimed: boolean;
+  contributions: Contribution[];
+};

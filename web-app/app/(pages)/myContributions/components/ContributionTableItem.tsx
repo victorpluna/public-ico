@@ -16,25 +16,31 @@ import {
   Text,
   useToast,
   Badge,
+  Table,
+  Thead,
+  Th,
+  Tbody,
+  Flex,
 } from "@chakra-ui/react";
 import { formatUnits } from "ethers";
 import Link from "next/link";
 import { BiMoneyWithdraw } from "react-icons/bi";
 import { usePathname, useRouter } from "next/navigation";
 import { convertTimestampToDate } from "@/app/config/utils";
-import { Contribution } from "@/app/models/contribution";
+import { ProjectContributions } from "@/app/models/contribution";
 import { executeWriteContract } from "@/app/lib/execute-write-contract";
 
 interface Props {
-  contribution: Contribution;
+  projectContributions: ProjectContributions;
 }
 
-export default function ContributionTableItem({ contribution }: Props) {
+export default function ContributionTableItem({ projectContributions }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
   const router = useRouter();
   const currentPath = usePathname();
-  const { projectId, projectTitle, value, claimed, createdAt } = contribution;
+  const { projectId, projectTitle, total, claimed, contributions } =
+    projectContributions;
 
   const handleConfirmClick = async (onClose: Function) => {
     setIsLoading(true);
@@ -62,60 +68,85 @@ export default function ContributionTableItem({ contribution }: Props) {
   };
 
   return (
-    <Tr>
-      <Td>
-        <Link href={`/projects/${projectId}`}>{projectTitle}</Link>
-      </Td>
-      <Td isNumeric>{formatUnits(value, "ether")} ETH</Td>
-      <Td>{convertTimestampToDate(createdAt).toLocaleDateString()}</Td>
-      <Td>
-        {claimed ? (
-          <Badge variant="outline" colorScheme="teal">
-            Refunded
-          </Badge>
-        ) : (
-          <Popover closeOnBlur={false}>
-            {({ onClose }) => (
-              <>
-                <PopoverTrigger>
-                  <Button
-                    leftIcon={<BiMoneyWithdraw />}
-                    onClick={() => {}}
-                    colorScheme="teal"
-                    variant="outline"
-                  >
-                    Refund
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <PopoverArrow />
-                  <PopoverCloseButton />
-                  <PopoverHeader>Confirmation!</PopoverHeader>
-                  <PopoverBody>
-                    <Text fontSize="xs">
-                      Are you sure you want to get your money back?
-                    </Text>
-                  </PopoverBody>
-                  <PopoverFooter display="flex" justifyContent="flex-end">
-                    <ButtonGroup size="sm">
-                      <Button onClick={onClose} variant="outline">
-                        Cancel
-                      </Button>
+    <>
+      <Tr>
+        <Td>
+          <Link href={`/projects/${projectId}`}>{projectTitle}</Link>
+        </Td>
+        <Td isNumeric>{formatUnits(total, "ether")} ETH</Td>
+        <Td>
+          <Flex justifyContent="flex-end">
+            {claimed ? (
+              <Badge variant="outline" colorScheme="teal">
+                Refunded
+              </Badge>
+            ) : (
+              <Popover closeOnBlur={false}>
+                {({ onClose }) => (
+                  <>
+                    <PopoverTrigger>
                       <Button
-                        isLoading={isLoading}
-                        onClick={() => handleConfirmClick(onClose)}
+                        leftIcon={<BiMoneyWithdraw />}
+                        onClick={() => {}}
                         colorScheme="teal"
+                        variant="outline"
                       >
-                        Yes
+                        Refund
                       </Button>
-                    </ButtonGroup>
-                  </PopoverFooter>
-                </PopoverContent>
-              </>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <PopoverArrow />
+                      <PopoverCloseButton />
+                      <PopoverHeader>Confirmation!</PopoverHeader>
+                      <PopoverBody>
+                        <Text fontSize="xs">
+                          Are you sure you want to get your money back?
+                        </Text>
+                      </PopoverBody>
+                      <PopoverFooter display="flex" justifyContent="flex-end">
+                        <ButtonGroup size="sm">
+                          <Button onClick={onClose} variant="outline">
+                            Cancel
+                          </Button>
+                          <Button
+                            isLoading={isLoading}
+                            onClick={() => handleConfirmClick(onClose)}
+                            colorScheme="teal"
+                          >
+                            Yes
+                          </Button>
+                        </ButtonGroup>
+                      </PopoverFooter>
+                    </PopoverContent>
+                  </>
+                )}
+              </Popover>
             )}
-          </Popover>
-        )}
-      </Td>
-    </Tr>
+          </Flex>
+        </Td>
+      </Tr>
+      <Tr>
+        <Td colSpan={3}>
+          <Table variant="striped">
+            <Thead>
+              <Tr>
+                <Th>Amount</Th>
+                <Th>Date</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {contributions.map(({ value, createdAt }) => (
+                <Tr>
+                  <Td>{formatUnits(value, "ether")} ETH</Td>
+                  <Td>
+                    {convertTimestampToDate(createdAt).toLocaleDateString()}
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </Td>
+      </Tr>
+    </>
   );
 }
