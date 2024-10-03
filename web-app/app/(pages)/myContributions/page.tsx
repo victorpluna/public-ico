@@ -37,6 +37,7 @@ const getOnChainContributions = async (): Promise<Contribution[]> => {
 
 export default async function MyContributions() {
   const contributions = await getOnChainContributions();
+  console.log("contributions", contributions);
 
   return (
     <Stack spacing={3}>
@@ -70,7 +71,7 @@ export default async function MyContributions() {
         <Table variant="striped">
           <Thead>
             <Tr>
-              <Th>Contributor</Th>
+              <Th>Project</Th>
               <Th isNumeric>Amount</Th>
               <Th>Date</Th>
             </Tr>
