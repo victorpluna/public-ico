@@ -183,6 +183,16 @@ export const contractAbi = [
     name: "contributions",
     outputs: [
       {
+        internalType: "uint256",
+        name: "projectId",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "projectTitle",
+        type: "string",
+      },
+      {
         internalType: "address",
         name: "contributor",
         type: "address",
@@ -250,6 +260,16 @@ export const contractAbi = [
     outputs: [
       {
         components: [
+          {
+            internalType: "uint256",
+            name: "projectId",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "projectTitle",
+            type: "string",
+          },
           {
             internalType: "address",
             name: "contributor",
@@ -441,6 +461,16 @@ export const contractAbi = [
     outputs: [
       {
         components: [
+          {
+            internalType: "uint256",
+            name: "projectId",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "projectTitle",
+            type: "string",
+          },
           {
             internalType: "address",
             name: "contributor",

@@ -18,6 +18,8 @@ contract PublicICO {
     }
 
     struct Contribution {
+        uint projectId;
+        string projectTitle;
         address contributor;
         uint value;
         bool claimed;
@@ -138,6 +140,8 @@ contract PublicICO {
         project.totalFunding += msg.value;
 
         Contribution memory newContribution = Contribution({
+            projectId: project.id,
+            projectTitle: project.title,
             contributor: msg.sender,
             value: msg.value,
             claimed: false,
