@@ -33,6 +33,7 @@ import {
 } from "@/app/config/utils";
 import ProjectActionButtons from "./components/ProjectActionButtons";
 import { Contribution } from "@/app/models/contribution";
+import { BreadCrumb } from "../../components/Breadcrumb";
 const ContributeProject = dynamic(
   () => import("./components/ContributeProject"),
   {
@@ -76,6 +77,9 @@ export default async function ProjectDetail({ params: { id } }: Props) {
 
   return (
     <Stack spacing="6">
+      <BreadCrumb
+        items={[{ label: "Open ICOs", href: "/" }, { label: project?.title }]}
+      />
       <Heading size="lg">{project?.title}</Heading>
       <HStack justifyContent="space-between">
         <Badge variant="outline" colorScheme="teal">
