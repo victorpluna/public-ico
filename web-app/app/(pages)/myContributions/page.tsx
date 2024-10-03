@@ -22,6 +22,7 @@ import { constants } from "../../lib/constants";
 import { config } from "../../config/wagmi";
 import { Contribution, ProjectContributions } from "@/app/models/contribution";
 import ContributionTableItem from "./components/ContributionTableItem";
+import { formatUnits } from "ethers";
 
 const getOnChainContributions = async (): Promise<Contribution[]> => {
   try {
@@ -35,38 +36,43 @@ const getOnChainContributions = async (): Promise<Contribution[]> => {
   }
 };
 
+const calculateTotalValue = (
+  contributions: ProjectContributions[],
+  claimed: boolean = false
+) =>
+  contributions
+    .filter(
+      ({ claimed: projectClaimed }) =>
+        (claimed && projectClaimed) || (!claimed && !projectClaimed)
+    )
+    .reduce(
+      (aggregated, { total }) => aggregated + +formatUnits(total, "ether"),
+      0
+    );
+
 export default async function MyContributions() {
   const contributions = groupContributionsByProject(
     await getOnChainContributions()
   );
-  console.log("contributions", contributions);
 
   return (
     <Stack spacing={3}>
       <StatGroup>
         <Stat>
-          <StatLabel>Total Value Locked (30d)</StatLabel>
-          <StatNumber>31.54 ETH</StatNumber>
-          <StatHelpText>
-            <StatArrow type="increase" />
-            23.36%
-          </StatHelpText>
+          <StatLabel>Total Value Locked</StatLabel>
+          <StatNumber>
+            {calculateTotalValue(contributions).toFixed(2)} ETH
+          </StatNumber>
         </Stat>
         <Stat>
-          <StatLabel>Total Value Dealt</StatLabel>
-          <StatNumber>412.33 ETH</StatNumber>
-          <StatHelpText>
-            <StatArrow type="increase" />
-            12.31%
-          </StatHelpText>
+          <StatLabel>Refunded Value Locked</StatLabel>
+          <StatNumber>
+            {calculateTotalValue(contributions, true)} ETH
+          </StatNumber>
         </Stat>
         <Stat>
-          <StatLabel>Dealt Projects</StatLabel>
-          <StatNumber>42</StatNumber>
-          <StatHelpText>
-            <StatArrow type="increase" />
-            22.05%
-          </StatHelpText>
+          <StatLabel>Invested Projects</StatLabel>
+          <StatNumber>{contributions.length}</StatNumber>
         </Stat>
       </StatGroup>
       <TableContainer>
