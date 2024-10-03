@@ -152,14 +152,9 @@ contract PublicICO {
         emit ContributionReceived(projectId, msg.sender, msg.value);
     }
 
-    function claimFunds(
-        uint projectId
-    ) external projectExists(projectId) projectExpired(projectId) {
+    function claimFunds(uint projectId) external projectExists(projectId) {
         Project storage project = projects[projectId];
-        require(
-            project.totalFunding < project.targetFunding,
-            "Target value has been reached. Unable to redeem."
-        );
+        require(!project.applied, "The project has already been applied.");
 
         uint totalContribution = 0;
 
