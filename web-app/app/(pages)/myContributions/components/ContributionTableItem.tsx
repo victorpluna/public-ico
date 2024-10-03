@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import {
   Button,
   ButtonGroup,
@@ -19,14 +20,10 @@ import {
 import { formatUnits } from "ethers";
 import Link from "next/link";
 import { BiMoneyWithdraw } from "react-icons/bi";
+import { usePathname, useRouter } from "next/navigation";
 import { convertTimestampToDate } from "@/app/config/utils";
 import { Contribution } from "@/app/models/contribution";
-import { writeContract } from "wagmi/actions";
-import { config } from "@/app/config/wagmi";
-import { contractAbi } from "@/app/config/contract-abi";
-import { constants } from "@/app/lib/constants";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { executeWriteContract } from "@/app/lib/execute-write-contract";
 
 interface Props {
   contribution: Contribution;
@@ -43,13 +40,12 @@ export default function ContributionTableItem({ contribution }: Props) {
     setIsLoading(true);
 
     try {
-      await writeContract(config, {
-        abi: contractAbi,
-        address: constants.contractAddress,
+      await executeWriteContract({
         functionName: "claimFunds",
         args: [projectId],
+        toast: toast,
+        onCloseComplete: () => router.push(currentPath),
       });
-      router.push(currentPath);
     } catch (error) {
       console.log("error", error);
       toast({

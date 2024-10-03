@@ -1,7 +1,4 @@
 "use client";
-import { contractAbi } from "@/app/config/contract-abi";
-import { config } from "@/app/config/wagmi";
-import { constants } from "@/app/lib/constants";
 import {
   Button,
   FormControl,
@@ -28,7 +25,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { BiPlus } from "react-icons/bi";
 import { useAccount } from "wagmi";
-import { writeContract } from "wagmi/actions";
+import { executeWriteContract } from "@/app/lib/execute-write-contract";
 
 interface Props {
   projectId: number;
@@ -46,7 +43,7 @@ interface FieldNumberProps {
 export default function ContributeProject({ projectId }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const router = useRouter();
   const currentPath = usePathname();
   const toast = useToast();
@@ -55,14 +52,13 @@ export default function ContributeProject({ projectId }: Props) {
     setIsLoading(true);
 
     try {
-      await writeContract(config, {
-        abi: contractAbi,
-        address: constants.contractAddress,
+      await executeWriteContract({
         functionName: "contribute",
         value: parseEther(value.toString()),
         args: [projectId],
+        toast: toast,
+        onCloseComplete: () => router.push(currentPath),
       });
-      router.push(currentPath);
     } catch (error) {
       console.log("error", error);
       toast({

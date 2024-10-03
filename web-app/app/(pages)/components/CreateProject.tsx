@@ -19,18 +19,16 @@ import {
   NumberInputStepper,
   Tooltip,
   useDisclosure,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { Formik, Field, FieldInputProps, FormikProps } from "formik";
 import { BiPlus } from "react-icons/bi";
 import { useAccount } from "wagmi";
-import { writeContract } from "wagmi/actions";
 import { parseEther } from "ethers";
 import { usePathname, useRouter } from "next/navigation";
 import { validateRequired, validateURL } from "@/app/config/validation";
-import { config } from "@/app/config/wagmi";
-import { contractAbi } from "@/app/config/contract-abi";
-import { constants } from "@/app/lib/constants";
+import { executeWriteContract } from "@/app/lib/execute-write-contract";
 
 interface FormValues {
   title: string;
@@ -53,6 +51,7 @@ export default function CreateProject() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isConnected } = useAccount();
   const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
 
   const handleSubmitForm = async (values: FormValues) => {
     setIsLoading(true);
@@ -65,24 +64,35 @@ export default function CreateProject() {
       ownFunding,
       fundingWallet,
     } = values;
-    const transactionId = await writeContract(config, {
-      abi: contractAbi,
-      address: constants.contractAddress,
-      functionName: "createProject",
-      value: parseEther(ownFunding.toString()),
-      args: [
-        title,
-        whitePaper,
-        projectPlan,
-        contractCode,
-        parseEther(targetFunding.toString()),
-        fundingWallet,
-      ],
-    });
-    console.log("transactionId", transactionId);
-    setIsLoading(false);
-    router.push(currentPath);
-    onClose();
+
+    try {
+      await executeWriteContract({
+        functionName: "createProject",
+        value: parseEther(ownFunding.toString()),
+        args: [
+          title,
+          whitePaper,
+          projectPlan,
+          contractCode,
+          parseEther(targetFunding.toString()),
+          fundingWallet,
+        ],
+        toast: toast,
+        onCloseComplete: () => router.push(currentPath),
+      });
+    } catch (error) {
+      console.log("error", error);
+      toast({
+        title: "Transaction failed.",
+        description: "Transaction could not be completed",
+        status: "error",
+        position: "top-right",
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+      onClose();
+    }
   };
 
   return (
