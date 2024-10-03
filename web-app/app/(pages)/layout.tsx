@@ -1,5 +1,3 @@
-import "../reset.scss";
-
 import { Box, Flex } from "@chakra-ui/react";
 
 import { Providers } from "../providers";

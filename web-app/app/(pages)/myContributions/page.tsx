@@ -74,6 +74,7 @@ export default async function MyContributions() {
               <Th>Project</Th>
               <Th isNumeric>Amount</Th>
               <Th>Date</Th>
+              <Th>Action</Th>
             </Tr>
           </Thead>
           <Tbody>

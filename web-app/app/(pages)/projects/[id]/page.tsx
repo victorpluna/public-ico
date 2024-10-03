@@ -70,7 +70,9 @@ const getOnChainProject = async (projectId: number): Promise<Project> => {
 
 export default async function ProjectDetail({ params: { id } }: Props) {
   const project = await getOnChainProject(id);
-  const contributions = await getOnChainContributions(id);
+  const contributions = (await getOnChainContributions(id)).filter(
+    ({ claimed }) => !claimed
+  );
 
   return (
     <Stack spacing="6">
