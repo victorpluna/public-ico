@@ -17,12 +17,12 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { readContract } from "wagmi/actions";
+import { formatUnits } from "ethers";
 import { contractAbi } from "../../config/contract-abi";
 import { constants } from "../../lib/constants";
 import { config } from "../../config/wagmi";
 import { Contribution, ProjectContributions } from "@/app/models/contribution";
 import ContributionTableItem from "./components/ContributionTableItem";
-import { formatUnits } from "ethers";
 
 const getOnChainContributions = async (): Promise<Contribution[]> => {
   try {
@@ -35,20 +35,6 @@ const getOnChainContributions = async (): Promise<Contribution[]> => {
     return [];
   }
 };
-
-const calculateTotalValue = (
-  contributions: ProjectContributions[],
-  claimed: boolean = false
-) =>
-  contributions
-    .filter(
-      ({ claimed: projectClaimed }) =>
-        (claimed && projectClaimed) || (!claimed && !projectClaimed)
-    )
-    .reduce(
-      (aggregated, { total }) => aggregated + +formatUnits(total, "ether"),
-      0
-    );
 
 export default async function MyContributions() {
   const contributions = groupContributionsByProject(
@@ -136,3 +122,17 @@ function groupContributionsByProject(
 
   return Array.from(projectMap.values());
 }
+
+const calculateTotalValue = (
+  contributions: ProjectContributions[],
+  claimed: boolean = false
+) =>
+  contributions
+    .filter(
+      ({ claimed: projectClaimed }) =>
+        (claimed && projectClaimed) || (!claimed && !projectClaimed)
+    )
+    .reduce(
+      (aggregated, { total }) => aggregated + +formatUnits(total, "ether"),
+      0
+    );

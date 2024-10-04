@@ -94,19 +94,52 @@ export default async function ProjectDetail({ params: { id } }: Props) {
             <Stat>
               <StatLabel>Locked Funding</StatLabel>
               <StatNumber>
-                {formatUnits(project?.totalFunding, "ether")} ETH
+                <Tooltip
+                  label={`${formatUnits(project?.totalFunding, "ether")} ETH`}
+                  placement="top"
+                  hasArrow
+                >
+                  <Text>
+                    {Number(
+                      formatUnits(project?.totalFunding, "ether")
+                    ).toFixed(2)}{" "}
+                    ETH
+                  </Text>
+                </Tooltip>
               </StatNumber>
             </Stat>
             <Stat>
               <StatLabel>Creator Funding</StatLabel>
               <StatNumber>
-                {formatUnits(project?.ownFunding, "ether")} ETH
+                <Tooltip
+                  label={`${formatUnits(project?.ownFunding, "ether")} ETH`}
+                  placement="top"
+                  hasArrow
+                >
+                  <Text>
+                    {Number(formatUnits(project?.ownFunding, "ether")).toFixed(
+                      2
+                    )}{" "}
+                    ETH
+                  </Text>
+                </Tooltip>
               </StatNumber>
             </Stat>
             <Stat>
               <StatLabel>Target Funding</StatLabel>
               <StatNumber>
-                {formatUnits(project?.targetFunding, "ether")} ETH
+                <Tooltip
+                  label={`${formatUnits(project?.targetFunding, "ether")} ETH`}
+                  placement="top"
+                  hasArrow
+                >
+                  <Text>
+                    {Number(
+                      formatUnits(project?.targetFunding, "ether")
+                    ).toFixed(2)}{" "}
+                    ETH
+                  </Text>
+                </Tooltip>
               </StatNumber>
             </Stat>
           </StatGroup>

@@ -19,6 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { readContract } from "wagmi/actions";
 import dynamic from "next/dynamic";
+import { formatUnits } from "ethers";
 import { contractAbi } from "../config/contract-abi";
 import { Project } from "../models/project";
 import { constants } from "../lib/constants";
@@ -47,28 +48,32 @@ export default async function Home() {
     <Stack spacing={3}>
       <StatGroup>
         <Stat>
-          <StatLabel>Total Value Locked (30d)</StatLabel>
-          <StatNumber>31.54 ETH</StatNumber>
+          <StatLabel>Total Value Locked</StatLabel>
+          <StatNumber>
+            {calculateTotalValue(projects).toFixed(2)} ETH
+          </StatNumber>
           <StatHelpText>
-            <StatArrow type="increase" />
-            23.36%
+            {(
+              (calculateTotalValue(projects) /
+                calculateTotalTargetValue(projects)) *
+              100
+            ).toFixed(2)}
+            %
           </StatHelpText>
         </Stat>
         <Stat>
-          <StatLabel>Total Value Dealt</StatLabel>
-          <StatNumber>412.33 ETH</StatNumber>
-          <StatHelpText>
-            <StatArrow type="increase" />
-            12.31%
-          </StatHelpText>
+          <StatLabel>Total Value Left</StatLabel>
+          <StatNumber>
+            {(
+              calculateTotalTargetValue(projects) -
+              calculateTotalValue(projects)
+            ).toFixed(2)}{" "}
+            ETH
+          </StatNumber>
         </Stat>
         <Stat>
-          <StatLabel>Dealt Projects</StatLabel>
-          <StatNumber>42</StatNumber>
-          <StatHelpText>
-            <StatArrow type="increase" />
-            22.05%
-          </StatHelpText>
+          <StatLabel>Open Projects</StatLabel>
+          <StatNumber>{projects.length}</StatNumber>
         </Stat>
       </StatGroup>
       <HStack justifyContent="flex-end" h="40px">
@@ -106,3 +111,17 @@ export default async function Home() {
     </Stack>
   );
 }
+
+const calculateTotalValue = (projects: Project[]) =>
+  projects.reduce(
+    (aggregated, { totalFunding }) =>
+      aggregated + +formatUnits(totalFunding, "ether"),
+    0
+  );
+
+const calculateTotalTargetValue = (projects: Project[]) =>
+  projects.reduce(
+    (aggregated, { targetFunding }) =>
+      aggregated + +formatUnits(targetFunding, "ether"),
+    0
+  );

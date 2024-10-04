@@ -1,5 +1,5 @@
 "use client";
-import { Progress, Td, Tr, Text } from "@chakra-ui/react";
+import { Progress, Td, Tr, Text, Tooltip } from "@chakra-ui/react";
 import { formatUnits } from "ethers";
 import { useRouter } from "next/navigation";
 import { Project } from "@/app/models/project";
@@ -23,9 +23,37 @@ export default function ProjectTableItem({ project }: Props) {
       style={{ cursor: "pointer" }}
     >
       <Td>{title}</Td>
-      <Td isNumeric>{formatUnits(ownFunding, "ether")} ETH</Td>
-      <Td isNumeric>{formatUnits(targetFunding, "ether")} ETH</Td>
-      <Td isNumeric>{formatUnits(totalFunding, "ether")} ETH</Td>
+      <Td isNumeric>
+        <Tooltip
+          label={`${formatUnits(ownFunding, "ether")} ETH`}
+          placement="top"
+          hasArrow
+        >
+          <Text>{Number(formatUnits(ownFunding, "ether")).toFixed(2)} ETH</Text>
+        </Tooltip>
+      </Td>
+      <Td isNumeric>
+        <Tooltip
+          label={`${formatUnits(targetFunding, "ether")} ETH`}
+          placement="top"
+          hasArrow
+        >
+          <Text>
+            {Number(formatUnits(targetFunding, "ether")).toFixed(2)} ETH
+          </Text>
+        </Tooltip>
+      </Td>
+      <Td isNumeric>
+        <Tooltip
+          label={`${formatUnits(totalFunding, "ether")} ETH`}
+          placement="top"
+          hasArrow
+        >
+          <Text>
+            {Number(formatUnits(totalFunding, "ether")).toFixed(2)} ETH
+          </Text>
+        </Tooltip>
+      </Td>
       <Td>
         <Progress
           value={calculateFundingProgress(targetFunding, totalFunding)}
