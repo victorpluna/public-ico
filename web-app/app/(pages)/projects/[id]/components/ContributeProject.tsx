@@ -114,6 +114,7 @@ export default function ContributeProject({ projectId }: Props) {
                             {...field}
                             step={0.01}
                             min={0.01}
+                            precision={8}
                             variant="filled"
                             onChange={(value) =>
                               form.setFieldValue(field.name, value)
