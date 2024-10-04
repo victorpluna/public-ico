@@ -1,10 +1,26 @@
 import { Box, Flex } from "@chakra-ui/react";
+import { Metadata } from "next";
 
 import { Providers } from "../providers";
 import { fonts } from "../fonts";
 import SideMenu from "./components/Layout/SideMenu";
 import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
+
+export const metadata: Metadata = {
+  title: {
+    default: "DICO - Decentralized ICOs",
+    template: "%s | DICO",
+  },
+  description:
+    "DICO is a decentralized application where web3 projects can raise decentralized and trustless funding",
+  openGraph: {
+    images: ["/images/logo-social.png"], // it's not working
+  },
+  twitter: {
+    images: ["/images/logo-social.png"], // it's not working
+  },
+};
 
 export default function RootLayout({
   children,

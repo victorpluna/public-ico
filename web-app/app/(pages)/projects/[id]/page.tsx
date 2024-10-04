@@ -69,6 +69,14 @@ const getOnChainProject = async (projectId: number): Promise<Project> => {
   })) as Project;
 };
 
+export async function generateMetadata({ params: { id } }: Props) {
+  const project = await getOnChainProject(id);
+
+  return {
+    title: project?.title,
+  };
+}
+
 export default async function ProjectDetail({ params: { id } }: Props) {
   const project = await getOnChainProject(id);
   const contributions = (await getOnChainContributions(id)).filter(
