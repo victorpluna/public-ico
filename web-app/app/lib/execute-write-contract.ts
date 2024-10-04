@@ -2,7 +2,6 @@ import { waitForTransactionReceipt, writeContract } from "wagmi/actions";
 import { config } from "../config/wagmi";
 import { contractAbi } from "../config/contract-abi";
 import { constants } from "./constants";
-import { position } from "@chakra-ui/react";
 
 interface Props {
   functionName: string;

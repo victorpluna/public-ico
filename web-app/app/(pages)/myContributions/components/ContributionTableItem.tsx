@@ -42,7 +42,7 @@ export default function ContributionTableItem({ projectContributions }: Props) {
   const { projectId, projectTitle, total, claimed, contributions } =
     projectContributions;
 
-  const handleConfirmClick = async (onClose: Function) => {
+  const handleConfirmClick = async (onClose: () => void) => {
     setIsLoading(true);
 
     try {
@@ -135,8 +135,8 @@ export default function ContributionTableItem({ projectContributions }: Props) {
               </Tr>
             </Thead>
             <Tbody>
-              {contributions.map(({ value, createdAt }) => (
-                <Tr>
+              {contributions.map(({ value, createdAt }, index) => (
+                <Tr key={index}>
                   <Td>{formatUnits(value, "ether")} ETH</Td>
                   <Td>
                     {convertTimestampToDate(createdAt).toLocaleDateString()}

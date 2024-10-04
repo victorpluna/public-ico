@@ -3,7 +3,6 @@ import {
   HStack,
   Stack,
   Stat,
-  StatArrow,
   StatGroup,
   StatHelpText,
   StatLabel,

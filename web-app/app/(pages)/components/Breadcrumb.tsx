@@ -13,8 +13,8 @@ interface Props {
 export function BreadCrumb({ items }: Props) {
   return (
     <Breadcrumb spacing="8px" separator={<FaChevronRight color="gray.500" />}>
-      {items.map(({ href, label }) => (
-        <BreadcrumbItem isCurrentPage={!href}>
+      {items.map(({ href, label }, index) => (
+        <BreadcrumbItem key={index} isCurrentPage={!href}>
           <BreadcrumbLink href={href}>{label}</BreadcrumbLink>
         </BreadcrumbItem>
       ))}
