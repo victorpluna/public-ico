@@ -26,6 +26,7 @@ import { useState } from "react";
 import { BiPlus } from "react-icons/bi";
 import { useAccount } from "wagmi";
 import { executeWriteContract } from "@/app/lib/execute-write-contract";
+import { refreshPage } from "@/app/actions";
 
 interface Props {
   projectId: number;
@@ -57,7 +58,7 @@ export default function ContributeProject({ projectId }: Props) {
         value: parseEther(value.toString()),
         args: [projectId],
         toast: toast,
-        onCloseComplete: () => router.push(currentPath),
+        onCloseComplete: () => refreshPage(currentPath),
       });
     } catch (error) {
       console.log("error", error);

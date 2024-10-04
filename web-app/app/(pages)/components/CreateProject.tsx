@@ -29,6 +29,7 @@ import { parseEther } from "ethers";
 import { usePathname, useRouter } from "next/navigation";
 import { validateRequired, validateURL } from "@/app/config/validation";
 import { executeWriteContract } from "@/app/lib/execute-write-contract";
+import { refreshPage } from "@/app/actions";
 
 interface FormValues {
   title: string;
@@ -78,7 +79,7 @@ export default function CreateProject() {
           fundingWallet,
         ],
         toast: toast,
-        onCloseComplete: () => router.push(currentPath),
+        onCloseComplete: () => refreshPage(currentPath),
       });
     } catch (error) {
       console.log("error", error);
