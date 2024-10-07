@@ -1,6 +1,6 @@
 "use client";
 import { Project } from "@/app/models/project";
-import { Button, HStack } from "@chakra-ui/react";
+import { Button, Stack } from "@chakra-ui/react";
 import { BiLinkExternal } from "react-icons/bi";
 
 interface Props {
@@ -9,7 +9,10 @@ interface Props {
 
 export default function ProjectActionButtons({ project }: Props) {
   return (
-    <HStack justifyContent="space-between">
+    <Stack
+      direction={{ base: "column", md: "row" }}
+      justifyContent="space-between"
+    >
       <Button
         rightIcon={<BiLinkExternal />}
         onClick={() => window.open(project.whitePaper, "_blank")}
@@ -34,6 +37,6 @@ export default function ProjectActionButtons({ project }: Props) {
       >
         Contract Code
       </Button>
-    </HStack>
+    </Stack>
   );
 }

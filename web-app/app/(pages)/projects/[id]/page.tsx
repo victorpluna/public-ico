@@ -94,8 +94,12 @@ export default async function ProjectDetail({ params: { id } }: Props) {
         </Badge>
         <ContributeProject projectId={id} />
       </HStack>
-      <HStack alignItems="flex-start" spacing="10">
-        <Stack flex="2" spacing="10">
+      <Stack
+        direction={{ base: "column", md: "row" }}
+        alignItems="flex-start"
+        spacing="10"
+      >
+        <Stack flex="2" w="full" spacing="10">
           <StatGroup>
             <Totalizer
               label="Locked Funding"
@@ -160,7 +164,7 @@ export default async function ProjectDetail({ params: { id } }: Props) {
           />
           <ProjectActionButtons project={project} />
         </Stack>
-        <Stack flex="1">
+        <Stack flex="1" w="full">
           <Heading fontWeight="500" size="xs">
             Contributions
           </Heading>
@@ -205,7 +209,7 @@ export default async function ProjectDetail({ params: { id } }: Props) {
             </Table>
           </TableContainer>
         </Stack>
-      </HStack>
+      </Stack>
     </Stack>
   );
 }
