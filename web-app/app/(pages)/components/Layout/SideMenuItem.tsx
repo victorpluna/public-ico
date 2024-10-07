@@ -7,6 +7,7 @@ interface SideMenuItemProps {
   icon: ElementType;
   label: string;
   href: string;
+  onClick?: () => void;
 }
 
 export default function SideMenuItem({
@@ -14,6 +15,7 @@ export default function SideMenuItem({
   icon,
   label,
   href,
+  onClick,
 }: SideMenuItemProps) {
   return (
     <Link
@@ -23,6 +25,7 @@ export default function SideMenuItem({
       bg={isActive ? "teal.50" : undefined}
       color={isActive ? "teal" : "gray.700"}
       _hover={{ bg: "teal.50", color: "teal" }}
+      onClick={onClick}
     >
       <HStack w="full" p={3} spacing={3}>
         <Icon as={icon} boxSize={5} />

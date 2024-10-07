@@ -1,9 +1,11 @@
 "use client";
 import { shortAddress } from "@/app/config/utils";
+import { FaBars, FaChevronRight, FaLayerGroup } from "react-icons/fa6";
 import {
   Box,
   Button,
   Flex,
+  IconButton,
   Menu,
   MenuButton,
   MenuItem,
@@ -12,7 +14,12 @@ import {
 import { FaChevronDown, FaPowerOff } from "react-icons/fa6";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 
-export default function Header() {
+interface Props {
+  onShowSidebar: () => void;
+  showSidebarButton?: boolean;
+}
+
+export default function Header({ showSidebarButton, onShowSidebar }: Props) {
   const {
     connectors: [connector],
     connect,
@@ -22,7 +29,19 @@ export default function Header() {
 
   return (
     <Box as="header" w="100%" p={4}>
-      <Flex justifyContent="end" alignItems="center">
+      <Flex
+        justifyContent={showSidebarButton ? "space-between" : "flex-end"}
+        alignItems="center"
+      >
+        {showSidebarButton && (
+          <IconButton
+            icon={<FaChevronRight />}
+            colorScheme="blackAlpha"
+            variant="outline"
+            onClick={onShowSidebar}
+            aria-label="toggle-button"
+          />
+        )}
         {address ? (
           <Menu>
             <MenuButton as={Button} rightIcon={<FaChevronDown />}>
