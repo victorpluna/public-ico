@@ -36,7 +36,7 @@ export function Layout({
           showSidebarButton={variants?.navigationButton}
           onShowSidebar={toggleSidebar}
         />
-        <Box flex="1" p={6} w="full">
+        <Box flex="1" px={{ base: 2, md: 6 }} py={{ base: 4, md: 6 }} w="full">
           {children}
         </Box>
         <Footer />

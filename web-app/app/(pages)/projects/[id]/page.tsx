@@ -5,10 +5,7 @@ import {
   HStack,
   Progress,
   Stack,
-  Stat,
   StatGroup,
-  StatLabel,
-  StatNumber,
   Table,
   TableContainer,
   Tbody,
@@ -34,6 +31,7 @@ import {
 import ProjectActionButtons from "./components/ProjectActionButtons";
 import { Contribution } from "@/app/models/contribution";
 import { BreadCrumb } from "../../components/Breadcrumb";
+import { Totalizer } from "../../components/Totalizer";
 const ContributeProject = dynamic(
   () => import("./components/ContributeProject"),
   {
@@ -99,9 +97,9 @@ export default async function ProjectDetail({ params: { id } }: Props) {
       <HStack alignItems="flex-start" spacing="10">
         <Stack flex="2" spacing="10">
           <StatGroup>
-            <Stat>
-              <StatLabel>Locked Funding</StatLabel>
-              <StatNumber>
+            <Totalizer
+              label="Locked Funding"
+              value={
                 <Tooltip
                   label={`${formatUnits(project?.totalFunding, "ether")} ETH`}
                   placement="top"
@@ -114,11 +112,11 @@ export default async function ProjectDetail({ params: { id } }: Props) {
                     ETH
                   </Text>
                 </Tooltip>
-              </StatNumber>
-            </Stat>
-            <Stat>
-              <StatLabel>Creator Funding</StatLabel>
-              <StatNumber>
+              }
+            />
+            <Totalizer
+              label="Creator Funding"
+              value={
                 <Tooltip
                   label={`${formatUnits(project?.ownFunding, "ether")} ETH`}
                   placement="top"
@@ -131,11 +129,11 @@ export default async function ProjectDetail({ params: { id } }: Props) {
                     ETH
                   </Text>
                 </Tooltip>
-              </StatNumber>
-            </Stat>
-            <Stat>
-              <StatLabel>Target Funding</StatLabel>
-              <StatNumber>
+              }
+            />
+            <Totalizer
+              label="Target Funding"
+              value={
                 <Tooltip
                   label={`${formatUnits(project?.targetFunding, "ether")} ETH`}
                   placement="top"
@@ -148,8 +146,8 @@ export default async function ProjectDetail({ params: { id } }: Props) {
                     ETH
                   </Text>
                 </Tooltip>
-              </StatNumber>
-            </Stat>
+              }
+            />
           </StatGroup>
           <Progress
             value={calculateFundingProgress(

@@ -1,10 +1,7 @@
 import {
   Center,
   Stack,
-  Stat,
   StatGroup,
-  StatLabel,
-  StatNumber,
   Table,
   TableContainer,
   Tbody,
@@ -21,6 +18,7 @@ import { constants } from "../../lib/constants";
 import { config } from "../../config/wagmi";
 import { Contribution, ProjectContributions } from "@/app/models/contribution";
 import ContributionTableItem from "./components/ContributionTableItem";
+import { Totalizer } from "../components/Totalizer";
 
 const getOnChainContributions = async (): Promise<Contribution[]> => {
   try {
@@ -42,22 +40,18 @@ export default async function MyContributions() {
   return (
     <Stack spacing={3}>
       <StatGroup>
-        <Stat>
-          <StatLabel>Total Value Locked</StatLabel>
-          <StatNumber>
-            {calculateTotalValue(contributions).toFixed(2)} ETH
-          </StatNumber>
-        </Stat>
-        <Stat>
-          <StatLabel>Refunded Value Locked</StatLabel>
-          <StatNumber>
-            {calculateTotalValue(contributions, true)} ETH
-          </StatNumber>
-        </Stat>
-        <Stat>
-          <StatLabel>Invested Projects</StatLabel>
-          <StatNumber>{contributions.length}</StatNumber>
-        </Stat>
+        <Totalizer
+          label="Invested Projects"
+          value={contributions.length.toString()}
+        />
+        <Totalizer
+          label="Total Value Locked"
+          value={`${calculateTotalValue(contributions).toFixed(2)} ETH`}
+        />
+        <Totalizer
+          label="Refunded Value"
+          value={`${calculateTotalValue(contributions, true)} ETH`}
+        />
       </StatGroup>
       <TableContainer>
         <Table>

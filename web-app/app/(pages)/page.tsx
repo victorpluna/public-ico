@@ -2,11 +2,7 @@ import {
   Center,
   HStack,
   Stack,
-  Stat,
   StatGroup,
-  StatHelpText,
-  StatLabel,
-  StatNumber,
   Table,
   TableContainer,
   Tbody,
@@ -24,6 +20,7 @@ import { Project } from "../models/project";
 import { constants } from "../lib/constants";
 import { config } from "../config/wagmi";
 import ProjectTableItem from "./components/ProjectTableItem";
+import { Totalizer } from "./components/Totalizer";
 const CreateProject = dynamic(() => import("./components/CreateProject"), {
   ssr: false,
 });
@@ -46,34 +43,23 @@ export default async function Home() {
   return (
     <Stack spacing={3}>
       <StatGroup>
-        <Stat>
-          <StatLabel>Total Value Locked</StatLabel>
-          <StatNumber>
-            {calculateTotalValue(projects).toFixed(2)} ETH
-          </StatNumber>
-          <StatHelpText>
-            {(
-              (calculateTotalValue(projects) /
-                calculateTotalTargetValue(projects)) *
-              100
-            ).toFixed(2)}
-            %
-          </StatHelpText>
-        </Stat>
-        <Stat>
-          <StatLabel>Total Value Left</StatLabel>
-          <StatNumber>
-            {(
-              calculateTotalTargetValue(projects) -
-              calculateTotalValue(projects)
-            ).toFixed(2)}{" "}
-            ETH
-          </StatNumber>
-        </Stat>
-        <Stat>
-          <StatLabel>Open Projects</StatLabel>
-          <StatNumber>{projects.length}</StatNumber>
-        </Stat>
+        <Totalizer label="Open Projects" value={projects.length.toString()} />
+        <Totalizer
+          label="Total Value Locked"
+          value={`${calculateTotalValue(projects).toFixed(2)} ETH`}
+          helpText={`${(
+            (calculateTotalValue(projects) /
+              calculateTotalTargetValue(projects)) *
+            100
+          ).toFixed(2)}
+            %`}
+        />
+        <Totalizer
+          label="Total Value Left"
+          value={`${(
+            calculateTotalTargetValue(projects) - calculateTotalValue(projects)
+          ).toFixed(2)} ETH`}
+        />
       </StatGroup>
       <HStack justifyContent="flex-end" h="40px">
         <CreateProject />

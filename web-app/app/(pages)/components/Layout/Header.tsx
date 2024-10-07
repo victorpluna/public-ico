@@ -28,7 +28,7 @@ export default function Header({ showSidebarButton, onShowSidebar }: Props) {
   const { disconnect } = useDisconnect();
 
   return (
-    <Box as="header" w="100%" p={4}>
+    <Box as="header" w="100%" p={{ base: 2, md: 4 }}>
       <Flex
         justifyContent={showSidebarButton ? "space-between" : "flex-end"}
         alignItems="center"
