@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { parseEther } from "ethers";
 import { Field, FieldInputProps, Formik, FormikProps } from "formik";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { BiPlus } from "react-icons/bi";
 import { useAccount } from "wagmi";
@@ -45,7 +45,6 @@ export default function ContributeProject({ projectId }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const { isConnected } = useAccount();
-  const router = useRouter();
   const currentPath = usePathname();
   const toast = useToast();
 

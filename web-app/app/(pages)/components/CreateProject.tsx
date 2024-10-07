@@ -26,7 +26,7 @@ import { Formik, Field, FieldInputProps, FormikProps } from "formik";
 import { BiPlus } from "react-icons/bi";
 import { useAccount } from "wagmi";
 import { parseEther } from "ethers";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { validateRequired, validateURL } from "@/app/config/validation";
 import { executeWriteContract } from "@/app/lib/execute-write-contract";
 import { refreshPage } from "@/app/actions";
@@ -47,7 +47,6 @@ interface FieldNumberProps {
 }
 
 export default function CreateProject() {
-  const router = useRouter();
   const currentPath = usePathname();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isConnected } = useAccount();

@@ -1,6 +1,6 @@
 "use client";
 import { shortAddress } from "@/app/config/utils";
-import { FaBars, FaChevronRight, FaLayerGroup } from "react-icons/fa6";
+import { FaChevronRight } from "react-icons/fa6";
 import {
   Box,
   Button,
