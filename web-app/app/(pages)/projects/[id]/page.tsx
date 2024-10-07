@@ -185,7 +185,7 @@ export default async function ProjectDetail({ params: { id } }: Props) {
                           </Tooltip>
                         </Td>
                         <Td isNumeric>{formatUnits(value, "ether")} ETH</Td>
-                        <Td>
+                        <Td suppressHydrationWarning>
                           {convertTimestampToDate(
                             createdAt
                           ).toLocaleDateString()}

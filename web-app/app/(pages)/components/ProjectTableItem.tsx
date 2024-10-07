@@ -65,7 +65,9 @@ export default function ProjectTableItem({ project }: Props) {
           %
         </Text>
       </Td>
-      <Td>{convertTimestampToDate(deadline).toLocaleDateString()}</Td>
+      <Td suppressHydrationWarning>
+        {convertTimestampToDate(deadline).toLocaleDateString()}
+      </Td>
     </Tr>
   );
 }

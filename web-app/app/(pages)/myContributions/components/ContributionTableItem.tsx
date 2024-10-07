@@ -69,7 +69,7 @@ export default function ContributionTableItem({ projectContributions }: Props) {
 
   return (
     <>
-      <Tr>
+      <Tr fontWeight="500">
         <Td>
           <Link href={`/projects/${projectId}`}>{projectTitle}</Link>
         </Td>
@@ -138,7 +138,7 @@ export default function ContributionTableItem({ projectContributions }: Props) {
               {contributions.map(({ value, createdAt }, index) => (
                 <Tr key={index}>
                   <Td>{formatUnits(value, "ether")} ETH</Td>
-                  <Td>
+                  <Td suppressHydrationWarning>
                     {convertTimestampToDate(createdAt).toLocaleDateString()}
                   </Td>
                 </Tr>
