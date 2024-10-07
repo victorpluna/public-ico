@@ -165,7 +165,7 @@ export default async function ProjectDetail({ params: { id } }: Props) {
             Contributions
           </Heading>
           <TableContainer>
-            <Table variant="striped">
+            <Table variant="striped" className="responsive-table">
               <Thead>
                 <Tr>
                   <Th>Wallet Address</Th>

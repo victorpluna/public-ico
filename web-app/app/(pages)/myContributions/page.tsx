@@ -54,7 +54,7 @@ export default async function MyContributions() {
         />
       </StatGroup>
       <TableContainer>
-        <Table>
+        <Table className="responsive-table">
           <Thead>
             <Tr>
               <Th>Project</Th>

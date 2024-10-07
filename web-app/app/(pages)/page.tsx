@@ -65,7 +65,7 @@ export default async function Home() {
         <CreateProject />
       </HStack>
       <TableContainer>
-        <Table variant="striped">
+        <Table variant="striped" className="responsive-table">
           <Thead>
             <Tr>
               <Th>Project Name</Th>
