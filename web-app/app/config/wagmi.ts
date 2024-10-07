@@ -1,12 +1,12 @@
 import { http, createConfig } from "wagmi";
 import { metaMask } from "wagmi/connectors";
-import { hardhatChain } from "./hardhat-chain";
+import { customChain } from "./chain";
 
 export const config = createConfig({
-  chains: [hardhatChain],
+  chains: [customChain],
   connectors: [metaMask()],
   ssr: true,
   transports: {
-    [hardhatChain.id]: http(),
+    [customChain.id]: http(),
   },
 });
