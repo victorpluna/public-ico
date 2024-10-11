@@ -13,8 +13,12 @@ interface Props {
 }
 
 export default function ProjectTableItem({ project }: Props) {
-  const { id, title, ownFunding, targetFunding, totalFunding, deadline } =
-    project;
+  const {
+    id,
+    title,
+    fundingDetails: { ownFunding, targetFunding, totalFunding },
+    deadline,
+  } = project;
   const router = useRouter();
 
   return (

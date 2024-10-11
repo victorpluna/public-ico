@@ -9,21 +9,54 @@ export const contractAbi = [
     inputs: [
       {
         indexed: false,
-        internalType: "uint256",
-        name: "projectId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
         internalType: "address",
-        name: "contributor",
+        name: "contractAddress",
         type: "address",
       },
+    ],
+    name: "ContractDeployed",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
       {
+        components: [
+          {
+            internalType: "uint256",
+            name: "projectId",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "projectTitle",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "contributor",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "value",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "claimed",
+            type: "bool",
+          },
+          {
+            internalType: "uint256",
+            name: "createdAt",
+            type: "uint256",
+          },
+        ],
         indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
+        internalType: "struct PublicICO.Contribution",
+        name: "contribution",
+        type: "tuple",
       },
     ],
     name: "ContributionReceived",
@@ -58,22 +91,96 @@ export const contractAbi = [
     anonymous: false,
     inputs: [
       {
+        components: [
+          {
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "title",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "creator",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "whitePaper",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "projectPlan",
+            type: "string",
+          },
+          {
+            components: [
+              {
+                internalType: "string",
+                name: "tokenTicker",
+                type: "string",
+              },
+              {
+                internalType: "uint256",
+                name: "totalSupply",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "tokenDistribution",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct PublicICO.TokenDetails",
+            name: "tokenDetails",
+            type: "tuple",
+          },
+          {
+            components: [
+              {
+                internalType: "uint256",
+                name: "ownFunding",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "targetFunding",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "totalFunding",
+                type: "uint256",
+              },
+              {
+                internalType: "address payable",
+                name: "fundingWallet",
+                type: "address",
+              },
+            ],
+            internalType: "struct PublicICO.FundingDetails",
+            name: "fundingDetails",
+            type: "tuple",
+          },
+          {
+            internalType: "uint256",
+            name: "deadline",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "applied",
+            type: "bool",
+          },
+        ],
         indexed: false,
-        internalType: "uint256",
-        name: "projectId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "creator",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "totalFunding",
-        type: "uint256",
+        internalType: "struct PublicICO.Project",
+        name: "project",
+        type: "tuple",
       },
     ],
     name: "ProjectApplied",
@@ -83,46 +190,96 @@ export const contractAbi = [
     anonymous: false,
     inputs: [
       {
+        components: [
+          {
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "title",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "creator",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "whitePaper",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "projectPlan",
+            type: "string",
+          },
+          {
+            components: [
+              {
+                internalType: "string",
+                name: "tokenTicker",
+                type: "string",
+              },
+              {
+                internalType: "uint256",
+                name: "totalSupply",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "tokenDistribution",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct PublicICO.TokenDetails",
+            name: "tokenDetails",
+            type: "tuple",
+          },
+          {
+            components: [
+              {
+                internalType: "uint256",
+                name: "ownFunding",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "targetFunding",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "totalFunding",
+                type: "uint256",
+              },
+              {
+                internalType: "address payable",
+                name: "fundingWallet",
+                type: "address",
+              },
+            ],
+            internalType: "struct PublicICO.FundingDetails",
+            name: "fundingDetails",
+            type: "tuple",
+          },
+          {
+            internalType: "uint256",
+            name: "deadline",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "applied",
+            type: "bool",
+          },
+        ],
         indexed: false,
-        internalType: "uint256",
-        name: "projectId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "title",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "creator",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "whitePaper",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "projectPlan",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "targetFunding",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "deadline",
-        type: "uint256",
+        internalType: "struct PublicICO.Project",
+        name: "project",
+        type: "tuple",
       },
     ],
     name: "ProjectCreated",
@@ -152,6 +309,19 @@ export const contractAbi = [
     name: "claimFunds",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "contractCount",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -235,8 +405,18 @@ export const contractAbi = [
       },
       {
         internalType: "string",
-        name: "contractCode",
+        name: "tokenTicker",
         type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "totalSupply",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "tokenDistribution",
+        type: "uint256",
       },
       {
         internalType: "uint256",
@@ -252,6 +432,25 @@ export const contractAbi = [
     name: "createProject",
     outputs: [],
     stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "deployedContracts",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -331,29 +530,53 @@ export const contractAbi = [
             type: "string",
           },
           {
-            internalType: "string",
-            name: "contractCode",
-            type: "string",
+            components: [
+              {
+                internalType: "string",
+                name: "tokenTicker",
+                type: "string",
+              },
+              {
+                internalType: "uint256",
+                name: "totalSupply",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "tokenDistribution",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct PublicICO.TokenDetails",
+            name: "tokenDetails",
+            type: "tuple",
           },
           {
-            internalType: "uint256",
-            name: "ownFunding",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "targetFunding",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "totalFunding",
-            type: "uint256",
-          },
-          {
-            internalType: "address payable",
-            name: "fundingWallet",
-            type: "address",
+            components: [
+              {
+                internalType: "uint256",
+                name: "ownFunding",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "targetFunding",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "totalFunding",
+                type: "uint256",
+              },
+              {
+                internalType: "address payable",
+                name: "fundingWallet",
+                type: "address",
+              },
+            ],
+            internalType: "struct PublicICO.FundingDetails",
+            name: "fundingDetails",
+            type: "tuple",
           },
           {
             internalType: "uint256",
@@ -406,29 +629,53 @@ export const contractAbi = [
             type: "string",
           },
           {
-            internalType: "string",
-            name: "contractCode",
-            type: "string",
+            components: [
+              {
+                internalType: "string",
+                name: "tokenTicker",
+                type: "string",
+              },
+              {
+                internalType: "uint256",
+                name: "totalSupply",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "tokenDistribution",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct PublicICO.TokenDetails",
+            name: "tokenDetails",
+            type: "tuple",
           },
           {
-            internalType: "uint256",
-            name: "ownFunding",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "targetFunding",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "totalFunding",
-            type: "uint256",
-          },
-          {
-            internalType: "address payable",
-            name: "fundingWallet",
-            type: "address",
+            components: [
+              {
+                internalType: "uint256",
+                name: "ownFunding",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "targetFunding",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "totalFunding",
+                type: "uint256",
+              },
+              {
+                internalType: "address payable",
+                name: "fundingWallet",
+                type: "address",
+              },
+            ],
+            internalType: "struct PublicICO.FundingDetails",
+            name: "fundingDetails",
+            type: "tuple",
           },
           {
             internalType: "uint256",
@@ -549,29 +796,53 @@ export const contractAbi = [
         type: "string",
       },
       {
-        internalType: "string",
-        name: "contractCode",
-        type: "string",
+        components: [
+          {
+            internalType: "string",
+            name: "tokenTicker",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "totalSupply",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "tokenDistribution",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct PublicICO.TokenDetails",
+        name: "tokenDetails",
+        type: "tuple",
       },
       {
-        internalType: "uint256",
-        name: "ownFunding",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "targetFunding",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "totalFunding",
-        type: "uint256",
-      },
-      {
-        internalType: "address payable",
-        name: "fundingWallet",
-        type: "address",
+        components: [
+          {
+            internalType: "uint256",
+            name: "ownFunding",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "targetFunding",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "totalFunding",
+            type: "uint256",
+          },
+          {
+            internalType: "address payable",
+            name: "fundingWallet",
+            type: "address",
+          },
+        ],
+        internalType: "struct PublicICO.FundingDetails",
+        name: "fundingDetails",
+        type: "tuple",
       },
       {
         internalType: "uint256",
@@ -625,29 +896,53 @@ export const contractAbi = [
             type: "string",
           },
           {
-            internalType: "string",
-            name: "contractCode",
-            type: "string",
+            components: [
+              {
+                internalType: "string",
+                name: "tokenTicker",
+                type: "string",
+              },
+              {
+                internalType: "uint256",
+                name: "totalSupply",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "tokenDistribution",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct PublicICO.TokenDetails",
+            name: "tokenDetails",
+            type: "tuple",
           },
           {
-            internalType: "uint256",
-            name: "ownFunding",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "targetFunding",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "totalFunding",
-            type: "uint256",
-          },
-          {
-            internalType: "address payable",
-            name: "fundingWallet",
-            type: "address",
+            components: [
+              {
+                internalType: "uint256",
+                name: "ownFunding",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "targetFunding",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "totalFunding",
+                type: "uint256",
+              },
+              {
+                internalType: "address payable",
+                name: "fundingWallet",
+                type: "address",
+              },
+            ],
+            internalType: "struct PublicICO.FundingDetails",
+            name: "fundingDetails",
+            type: "tuple",
           },
           {
             internalType: "uint256",

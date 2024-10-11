@@ -105,13 +105,19 @@ export default async function ProjectDetail({ params: { id } }: Props) {
               label="Locked Funding"
               value={
                 <Tooltip
-                  label={`${formatUnits(project?.totalFunding, "ether")} ETH`}
+                  label={`${formatUnits(
+                    project?.fundingDetails?.totalFunding,
+                    "ether"
+                  )} ETH`}
                   placement="top"
                   hasArrow
                 >
                   <Text>
                     {Number(
-                      formatUnits(project?.totalFunding, "ether")
+                      formatUnits(
+                        project?.fundingDetails?.totalFunding,
+                        "ether"
+                      )
                     ).toFixed(2)}{" "}
                     ETH
                   </Text>
@@ -122,14 +128,17 @@ export default async function ProjectDetail({ params: { id } }: Props) {
               label="Creator Funding"
               value={
                 <Tooltip
-                  label={`${formatUnits(project?.ownFunding, "ether")} ETH`}
+                  label={`${formatUnits(
+                    project?.fundingDetails?.ownFunding,
+                    "ether"
+                  )} ETH`}
                   placement="top"
                   hasArrow
                 >
                   <Text>
-                    {Number(formatUnits(project?.ownFunding, "ether")).toFixed(
-                      2
-                    )}{" "}
+                    {Number(
+                      formatUnits(project?.fundingDetails?.ownFunding, "ether")
+                    ).toFixed(2)}{" "}
                     ETH
                   </Text>
                 </Tooltip>
@@ -139,13 +148,19 @@ export default async function ProjectDetail({ params: { id } }: Props) {
               label="Target Funding"
               value={
                 <Tooltip
-                  label={`${formatUnits(project?.targetFunding, "ether")} ETH`}
+                  label={`${formatUnits(
+                    project?.fundingDetails?.targetFunding,
+                    "ether"
+                  )} ETH`}
                   placement="top"
                   hasArrow
                 >
                   <Text>
                     {Number(
-                      formatUnits(project?.targetFunding, "ether")
+                      formatUnits(
+                        project?.fundingDetails?.targetFunding,
+                        "ether"
+                      )
                     ).toFixed(2)}{" "}
                     ETH
                   </Text>
@@ -155,8 +170,8 @@ export default async function ProjectDetail({ params: { id } }: Props) {
           </StatGroup>
           <Progress
             value={calculateFundingProgress(
-              project?.targetFunding,
-              project?.totalFunding
+              project?.fundingDetails?.targetFunding,
+              project?.fundingDetails?.totalFunding
             )}
             size="lg"
             colorScheme="teal"

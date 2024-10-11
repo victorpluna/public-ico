@@ -99,14 +99,14 @@ export default async function Home() {
 
 const calculateTotalValue = (projects: Project[]) =>
   projects.reduce(
-    (aggregated, { totalFunding }) =>
+    (aggregated, { fundingDetails: { totalFunding } }) =>
       aggregated + +formatUnits(totalFunding, "ether"),
     0
   );
 
 const calculateTotalTargetValue = (projects: Project[]) =>
   projects.reduce(
-    (aggregated, { targetFunding }) =>
+    (aggregated, { fundingDetails: { targetFunding } }) =>
       aggregated + +formatUnits(targetFunding, "ether"),
     0
   );

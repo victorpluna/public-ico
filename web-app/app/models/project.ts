@@ -4,11 +4,17 @@ export interface Project {
   creator: string;
   whitePaper: string;
   projectPlan: string;
-  contractCode: string;
-  ownFunding: number;
-  targetFunding: number;
-  totalFunding: number;
-  fundingWallet: string;
+  fundingDetails: {
+    ownFunding: number;
+    targetFunding: number;
+    totalFunding: number;
+    fundingWallet: string;
+  };
+  tokenDetails: {
+    tokenTicker: string;
+    totalSupply: number;
+    distribution: number;
+  };
   deadline: number;
   applied: boolean;
 }
