@@ -1,18 +1,29 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.2 <0.9.0;
 
+import "./SampleContract.sol";
+
 contract PublicICO {
+    struct TokenDetails {
+        string tokenTicker;
+        uint totalSupply;
+        uint tokenDistribution;
+    }
+
+    struct FundingDetails {
+        uint ownFunding;
+        uint targetFunding;
+        uint totalFunding;
+        address payable fundingWallet;
+    }
     struct Project {
         uint id;
         string title;
         address creator;
         string whitePaper;
         string projectPlan;
-        string contractCode;
-        uint ownFunding;
-        uint targetFunding;
-        uint totalFunding;
-        address payable fundingWallet;
+        TokenDetails tokenDetails;
+        FundingDetails fundingDetails;
         uint deadline;
         bool applied;
     }
@@ -29,23 +40,14 @@ contract PublicICO {
     mapping(uint => Project) public projects;
     mapping(uint => Contribution[]) public contributions;
     uint public projectCount;
+    uint256 public contractCount;
+    address[] public deployedContracts;
 
-    event ProjectCreated(
-        uint projectId,
-        string title,
-        address creator,
-        string whitePaper,
-        string projectPlan,
-        uint targetFunding,
-        uint deadline
-    );
-    event ContributionReceived(
-        uint projectId,
-        address contributor,
-        uint amount
-    );
+    event ProjectCreated(Project project);
+    event ContributionReceived(Contribution contribution);
     event FundsClaimed(uint projectId, address contributor, uint amount);
-    event ProjectApplied(uint projectId, address creator, uint totalFunding);
+    event ProjectApplied(Project project);
+    event ContractDeployed(address contractAddress);
 
     modifier onlyCreator(uint projectId) {
         require(
@@ -78,8 +80,8 @@ contract PublicICO {
 
     modifier targetAchieved(uint projectId) {
         require(
-            projects[projectId].totalFunding >=
-                projects[projectId].targetFunding,
+            projects[projectId].fundingDetails.totalFunding >=
+                projects[projectId].fundingDetails.targetFunding,
             "Target value not reached."
         );
         _;
@@ -87,19 +89,43 @@ contract PublicICO {
 
     constructor() {
         projectCount = 0;
+        contractCount = 0;
     }
 
     function createProject(
         string memory title,
         string memory whitePaper,
         string memory projectPlan,
-        string memory contractCode,
+        string memory tokenTicker,
+        uint totalSupply,
+        uint tokenDistribution,
         uint targetFunding,
         address payable fundingWallet
     ) external payable {
         require(msg.value > 0, "Project creator needs to lock in a value.");
+        require(
+            bytes(tokenTicker).length > 0 && bytes(tokenTicker).length <= 5,
+            "tokenTicker must be up to 5 characters long."
+        );
+        require(
+            tokenDistribution >= 0 && tokenDistribution <= 100,
+            "tokenDistribution must be between 0 and 100 characters long."
+        );
 
         uint deadline = block.timestamp + 90 days;
+
+        TokenDetails memory tokenDetails = TokenDetails({
+            tokenTicker: tokenTicker,
+            totalSupply: totalSupply,
+            tokenDistribution: tokenDistribution
+        });
+
+        FundingDetails memory fundingDetails = FundingDetails({
+            ownFunding: msg.value,
+            targetFunding: targetFunding,
+            totalFunding: msg.value,
+            fundingWallet: fundingWallet
+        });
 
         Project memory newProject = Project({
             id: projectCount,
@@ -107,28 +133,31 @@ contract PublicICO {
             title: title,
             whitePaper: whitePaper,
             projectPlan: projectPlan,
-            contractCode: contractCode,
-            ownFunding: msg.value,
-            targetFunding: targetFunding,
-            totalFunding: msg.value,
-            fundingWallet: fundingWallet,
+            tokenDetails: tokenDetails,
+            fundingDetails: fundingDetails,
             deadline: deadline,
             applied: false
         });
 
         projects[projectCount] = newProject;
 
-        emit ProjectCreated(
-            projectCount,
-            title,
-            msg.sender,
-            whitePaper,
-            projectPlan,
-            targetFunding,
-            deadline
-        );
+        emit ProjectCreated(newProject);
 
         projectCount++;
+    }
+
+    function deployContract(
+        string memory name,
+        string memory ticker,
+        uint256 totalSupply
+    ) private returns (address) {
+        SampleContract token = new SampleContract(name, ticker, totalSupply);
+        // token.transfer(msg.sender, totalSupply);
+        deployedContracts.push(address(token));
+        contractCount += 1;
+
+        emit ContractDeployed(address(token));
+        return address(token);
     }
 
     function contribute(
@@ -137,7 +166,7 @@ contract PublicICO {
         require(msg.value > 0, "Contribution must have a value.");
 
         Project storage project = projects[projectId];
-        project.totalFunding += msg.value;
+        project.fundingDetails.totalFunding += msg.value;
 
         Contribution memory newContribution = Contribution({
             projectId: project.id,
@@ -149,7 +178,7 @@ contract PublicICO {
         });
         contributions[projectId].push(newContribution);
 
-        emit ContributionReceived(projectId, msg.sender, msg.value);
+        emit ContributionReceived(newContribution);
     }
 
     function claimFunds(uint projectId) external projectExists(projectId) {
@@ -172,7 +201,7 @@ contract PublicICO {
 
         require(totalContribution > 0, "No contributions to be claimed.");
 
-        project.totalFunding -= totalContribution;
+        project.fundingDetails.totalFunding -= totalContribution;
 
         payable(msg.sender).transfer(totalContribution);
 
@@ -193,11 +222,17 @@ contract PublicICO {
 
         project.applied = true;
 
-        // TODO: Contract creation using a Factory.
+        deployContract(
+            project.title,
+            project.tokenDetails.tokenTicker,
+            project.tokenDetails.totalSupply
+        );
 
-        project.fundingWallet.transfer(project.totalFunding);
+        project.fundingDetails.fundingWallet.transfer(
+            project.fundingDetails.totalFunding
+        );
 
-        emit ProjectApplied(projectId, project.creator, project.totalFunding);
+        emit ProjectApplied(project);
     }
 
     function listActiveProjects() external view returns (Project[] memory) {

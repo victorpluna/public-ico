@@ -24,5 +24,8 @@
   "scripts": {
     "start": "hardhat node",
     "deploy": "hardhat run ./ignition/scripts/deploy.ts --network localhost"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.2"
   }
 }
